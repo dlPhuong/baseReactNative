@@ -16,10 +16,20 @@ export default function MainPage({ navigation }) {
   // console.log(logins);
 
   return (
-    <Tab.Navigator
-      tabBarOptions={{ activeTintColor: '#e91e63' }}
+    // <Tab.Navigator
+    //   tabBarOptions={{ activeTintColor: '#e91e63' }}
+    // >
 
-    >
+    <Tab.Navigator
+        initialRouteName="Feed"
+        shifting={true}
+        labeled={false}
+        sceneAnimationEnabled={false}
+        activeColor="#9FE2BF"
+        inactiveColor="#95a5a6"
+        barStyle={{ backgroundColor: '#40E0D0' }}
+        >
+
       <Tab.Screen
         name="Home"
         component={HomeRoute}

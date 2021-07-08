@@ -105,7 +105,8 @@ const styles = StyleSheet.create({
     },
     itemRender: {
         flexDirection: "row",
-        marginVertical: 5,
+        marginVertical: 10,
+        marginLeft: 10,
     }, centeredView: {
         flex: 1,
         justifyContent: "center",

@@ -69,10 +69,11 @@ const styles = StyleSheet.create({
         fontWeight:"bold",
         textAlignVertical:"center",
         marginLeft:10,
-    }, 
+    },
     itemRender: {
         flexDirection: "row",
-        marginVertical: 5,
+        marginVertical: 10,
+        marginLeft:10,
     }
 
 });

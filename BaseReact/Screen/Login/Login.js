@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { View, Text, Pressable, TouchableOpacity, StyleSheet } from "react-native";
-import BackButton from "../../component/BackButton";
-import Background from "../../component/Background";
 import Button from "../../component/Button";
 import Header from "../../component/Header";
 import Logo from "../../component/Logo";
@@ -14,6 +12,7 @@ import { getAccount,getToken } from "./Login-reducer";
 import axios from "axios";
 import { RawButton } from "react-native-gesture-handler";
 import {decode as atob, encode as btoa} from 'base-64'
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState({ value: '', error: '' });
@@ -66,31 +65,49 @@ export default function Login({ navigation }) {
   }
   return (
     <View style={styles.container}>
-    <Header header={"Login"}/>
+
+    {/*<View style={styles.header}>*/}
+    {/*  <Header header={"Login"}/>*/}
+    {/*</View>*/}
+
       <Logo />
+
       <TextInput
-        style={{paddingHorizontal:20}}
-        label="Nhập tài khoản"
-        returnKeyType="next"
-        value={email.value}
-        onChangeText={(text) => setEmail({ value: text, error: '' })}
-        error={!!email.error}
-        errorText={email.error}
-        autoCapitalize="none"
-        autoCompleteType="email"
-        textContentType="emailAddress"
-        keyboardType="email-address"
+          style={{paddingHorizontal:20}}
+          label="Nhập tài khoản"
+          returnKeyType="next"
+          value={email.value}
+          onChangeText={(text) => setEmail({ value: text, error: '' })}
+          error={!!email.error}
+          errorText={email.error}
+          autoCapitalize="none"
+          autoCompleteType="email"
+          textContentType="emailAddress"
+          keyboardType="email-address"
       />
-      <TextInput
-        style={{paddingHorizontal:20}}
-        label="Password"
-        returnKeyType="done"
-        value={password.value}
-        onChangeText={(text) => setPassword({ value: text, error: '' })}
-        error={!!password.error}
-        errorText={password.error}
-        secureTextEntry
-      />
+
+
+
+      <View style={styles.inputTextForm}>
+        <TextInput
+            label="Password"
+            returnKeyType="done"
+            value={password.value}
+            onChangeText={(text) => setPassword({ value: text, error: '' })}
+            error={!!password.error}
+            errorText={password.error}
+            secureTextEntry
+        />
+
+        <TouchableOpacity
+            style={styles.fingerPrintIcon}
+            onPress={()=> {
+              console.log('does not work');
+            }}>
+          <MaterialCommunityIcons  name={'fingerprint'} color='#0099FF' size={55} />
+        </TouchableOpacity>
+
+      </View>
 
       <View style={styles.forgotPassword}>
       <TouchableOpacity
@@ -110,9 +127,6 @@ export default function Login({ navigation }) {
         <Button mode="contained" onPress={onLoginPressed}>
           Đăng nhập
         </Button>
-      </View>
-
-      <View style={{width:320}}>
         <Button mode="contained" onPress={onLoginPressed}>
           Thoát
         </Button>
@@ -133,24 +147,11 @@ const styles = StyleSheet.create({
   },
   forgot: {
     fontSize: 13,
+    fontWeight:'bold',
     flex:1,
     alignItems:"center",
     paddingHorizontal:30,
     color: theme.colors.secondary,
-  },
-  row: {
-    flexDirection: 'row',
-    marginTop: 4,
-  },
-  link: {
-    fontWeight: 'bold',
-    color: theme.colors.primary,
-    
-  },
-  background: {
-    flex: 1,
-    width: '100%',
-    backgroundColor: theme.colors.surface,
   },
   container: {
     flex: 1,
@@ -159,5 +160,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  // new
+  header:{
+    position: 'absolute',
+    flex: 1,
+    left: 0,
+    right: 0,
+    top: 0
+  },
+  inputTextForm: {
+    width: '100%',
+    flexDirection: 'row',
+    paddingHorizontal: 20
+  },
+  fingerPrintIcon:{
+    position: 'absolute',
+    right: 30,
+    top: 20,
+    color: theme.colors.white,
+  }
 });
 

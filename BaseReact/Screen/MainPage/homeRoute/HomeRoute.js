@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, Dimensions, SafeAreaView, ScrollView, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  Dimensions,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Image,
+  TouchableOpacity
+} from "react-native";
 import Header from "../../../component/Header";
 import Carosel from "../../../component/Carosel";
 import { FlatList } from "react-native";
@@ -48,15 +58,17 @@ export default function HomeRoute({ navigation }) {
   // item flatlist
   const renderItem = ({ item }) => {
     return (
-      <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: 10 }}>
-        <Image
-          style={styles.IMGFlatlistItem}
-          source={{
-            uri: item.ImageUrl,
-          }}
-        />
-        <Text style={styles.TextFlatlistItem}>{item.Ten}</Text>
-      </View>
+        <TouchableOpacity
+            onPress={() => navigation.navigate('productDetail',{item})}
+            style={{ justifyContent: 'center', alignItems: 'center', marginVertical: 10 }}>
+          <Image
+              style={styles.IMGFlatlistItem}
+              source={{
+                uri: item.ImageUrl,
+              }}
+          />
+          <Text style={styles.TextFlatlistItem}>{item.Ten}</Text>
+        </TouchableOpacity>
     );
   }
 
@@ -157,8 +169,8 @@ const styles = StyleSheet.create({
   },
   IMGFlatlistItem: {
     flex: 1,
-    width: windowWidth * 0.2,
-    height: 50,
+    width: windowWidth * 0.3,
+    height: windowHeight * 0.1,
     marginLeft: 10,
     marginRight: 10,
     resizeMode: 'contain',
