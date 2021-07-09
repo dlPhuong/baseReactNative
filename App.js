@@ -12,6 +12,7 @@ import ProductDetail from "./Screen/ProductDetail/ProductDetail";
 import AccountDetail from './Screen/AccountDetail/AccountDetail';
 import Promotion from './Screen/MainPage/Utilities/Promotion/Promotion';
 import PromotionDetail from './Screen/MainPage/Utilities/Promotion/PromotionDetail';
+import XtiNews from './Screen/MainPage/Utilities/XTINews/XtiNews';
 
 const Stack = createStackNavigator();
 
@@ -26,6 +27,8 @@ const App = () => {
                     <Stack.Screen name="promotionDetail" component={PromotionDetail}/>
                     <Stack.Screen name="productDetail" component={ProductDetail}/>
                     <Stack.Screen name="accountDetail" component={AccountDetail}/>
+
+                    <Stack.Screen name="xtiNews" component={XtiNews}/>
                 </Stack.Navigator>
             </NavigationContainer>
         </Provider>

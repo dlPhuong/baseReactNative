@@ -51,8 +51,8 @@ export default function Utilities({ navigation }) {
             case 'mailbox': 
             navigation.navigate('promotion')
               break;
-            case 'folder-key':
-                console.log("hihi laf tows ne");
+            case 'calendar':
+                navigation.navigate('xtiNews')
               break;
             default:
               // code block
