@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { View, Text, FlatList, Pressable, Dimensions, SafeAreaView, ScrollView, StyleSheet,Modal, Image } from "react-native";
+import { View, Text, FlatList, Pressable, Dimensions, SafeAreaView, ScrollView, StyleSheet,Modal, Image, TouchableOpacity } from "react-native";
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 import Header from "../../../component/Header";
 import DialogPassword from "../../../component/DialogPassword";
@@ -34,15 +34,31 @@ export default function Account({ navigation }) {
 
     const [Utilitis, setUtilitis] = useState(dataUtilities);
     // render giao diện {item.icon}
+
+    function nextScreen(navi){
+        switch(navi) {
+            case 'account': 
+            navigation.navigate('accountDetail')
+              break;
+            case 'folder-key':
+                console.log("hihi laf tows ne");
+              break;
+            default:
+              // code block
+          }
+    }
+
     const renderItem = ({ item }) => {
         return (
-            <View style={styles.itemRender}>
+            <TouchableOpacity 
+            onPress={() => nextScreen(item.icon) }
+            style={styles.itemRender}>
                 <MaterialCommunityIcons name={item.icon} color='#0099FF' size={42} />
                 <Text style={styles.textContent}>{item.name}</Text>
                 {item.name == 'Đăng nhập sinh trắc' ?
                     <Switch style={{ alignItems: "flex-end" }} value={isSwitchOn} onValueChange={onToggleSwitch} />
                     : null}
-            </View>
+            </TouchableOpacity>
         );
     }
 

@@ -86,13 +86,14 @@ export default function HomeRoute({ navigation }) {
 
   return (
 
-    <View style={{ flex: 1 }}>
+    <ScrollView style={{ flex: 1 }}>
       <View style={{ position: 'absolute', flex: 1, left: 0, right: 0, top: 0 }}>
         <Header header={"Trang chủ"} />
       </View>
-      <ScrollView style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
 
         <Carosel />
+        
         <View style={styles.textTitile}>
           <Text style={styles.itemtextTitile}>
             Sản phẩm bảo hiểm
@@ -128,8 +129,8 @@ export default function HomeRoute({ navigation }) {
             keyExtractor={item => item.Id}
           />
         </SafeAreaView>
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
 
   );
 }

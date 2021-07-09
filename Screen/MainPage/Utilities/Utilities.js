@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { View, Text,FlatList, Pressable, Dimensions, SafeAreaView, ScrollView, StyleSheet, Image } from "react-native";
+import { View, Text,FlatList, Pressable, Dimensions, SafeAreaView, ScrollView, StyleSheet, Image, TouchableOpacity } from "react-native";
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 import Header from "../../../component/Header";
 export default function Utilities({ navigation }) {
@@ -37,11 +37,26 @@ export default function Utilities({ navigation }) {
     // render giao diện {item.icon}
     const renderItem = ({ item }) => {
         return (
-            <View style={styles.itemRender}>
+            <TouchableOpacity
+            onPress={() => nextScreen(item.icon) }
+            style={styles.itemRender}>
                 <MaterialCommunityIcons name={item.icon} color='#0099FF' size={42} />
                 <Text style={styles.textContent}>{item.name}</Text>
-            </View>
+            </TouchableOpacity>
         );
+    }
+
+    function nextScreen(navi){
+        switch(navi) {
+            case 'mailbox': 
+            navigation.navigate('promotion')
+              break;
+            case 'folder-key':
+                console.log("hihi laf tows ne");
+              break;
+            default:
+              // code block
+          }
     }
 
     return (

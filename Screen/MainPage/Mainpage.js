@@ -8,6 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Utilities from "./Utilities/Utilities";
 import Account from "./Account/Account";
+import { theme } from "../../core/theme";
 const Tab = createBottomTabNavigator();
 
 export default function MainPage({ navigation }) {
@@ -16,20 +17,9 @@ export default function MainPage({ navigation }) {
   // console.log(logins);
 
   return (
-    // <Tab.Navigator
-    //   tabBarOptions={{ activeTintColor: '#e91e63' }}
-    // >
-
     <Tab.Navigator
-        initialRouteName="Feed"
-        shifting={true}
-        labeled={false}
-        sceneAnimationEnabled={false}
-        activeColor="#9FE2BF"
-        inactiveColor="#95a5a6"
-        barStyle={{ backgroundColor: '#40E0D0' }}
-        >
-
+      tabBarOptions={{ activeTintColor: theme.colors.primary }}
+    >
       <Tab.Screen
         name="Home"
         component={HomeRoute}
