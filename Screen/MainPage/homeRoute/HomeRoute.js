@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   itemtextTitile: {
-    fontSize: 16,
+    fontSize: 20,
     flex: 1,
     fontWeight: "bold",
     alignItems: "center",
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   itemtextTitile1: {
-    fontSize: 16,
+    fontSize: 20,
     flex: 1,
     fontWeight: "bold",
     alignItems: "center",
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     textAlign: 'center',
     justifyContent: 'center',
-    fontSize: 12,
+    fontSize: 14,
     fontFamily: "Cochin",
     color: "#00CCFF",
     width: 100,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { View, Text,FlatList, Pressable, Dimensions, SafeAreaView, ScrollView, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, FlatList, Pressable, Dimensions, SafeAreaView, ScrollView, StyleSheet, Image, TouchableOpacity } from "react-native";
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 import Header from "../../../component/Header";
 export default function Utilities({ navigation }) {
@@ -36,40 +36,50 @@ export default function Utilities({ navigation }) {
     const [Utilitis, setUtilitis] = useState(dataUtilities);
     // render giao diện {item.icon}
     const renderItem = ({ item }) => {
+
         return (
             <TouchableOpacity
-            onPress={() => nextScreen(item.icon) }
-            style={styles.itemRender}>
+                onPress={() => nextScreen(item)}
+                style={styles.itemRender}>
                 <MaterialCommunityIcons name={item.icon} color='#0099FF' size={42} />
                 <Text style={styles.textContent}>{item.name}</Text>
             </TouchableOpacity>
         );
     }
 
-    function nextScreen(navi){
-        switch(navi) {
-            case 'mailbox': 
-            navigation.navigate('promotion')
-              break;
+    function nextScreen(navi) {
+        switch (navi.icon) {
+            case 'mailbox':
+                navigation.navigate('promotion')
+                break;
             case 'calendar':
                 navigation.navigate('xtiNews')
-              break;
+                break;
+            case 'microsoft-internet-explorer':
+                navigation.navigate('ListPosition', { navi })
+                break;
+            case 'clipboard-list':
+                navigation.navigate('ListPosition', { navi })
+                break;
+            case 'car-settings':
+                navigation.navigate('ListPosition', { navi })
+                break;
             default:
-              // code block
-          }
+            // code block
+        }
     }
 
     return (
-        <View style={{position: 'absolute',flex: 1, left: 0, right: 0, top: 0}}>
-        <Header header={"Sản phẩm"} />
-        <SafeAreaView style={styles.container}>
-            <FlatList
-                data={Utilitis}
-                renderItem={renderItem}
-                keyExtractor={item => item.Id}
-            />
-        </SafeAreaView>
-      </View>
+        <View style={{ position: 'absolute', flex: 1, left: 0, right: 0, top: 0 }}>
+            <Header header={"Tiện ích"} />
+            <SafeAreaView style={styles.container}>
+                <FlatList
+                    data={Utilitis}
+                    renderItem={renderItem}
+                    keyExtractor={item => item.Id}
+                />
+            </SafeAreaView>
+        </View>
     );
 }
 
@@ -77,18 +87,18 @@ export default function Utilities({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop:40,
+        marginTop: 40,
         justifyContent: "flex-start",
     },
-     textContent: {
-        fontWeight:"bold",
-        textAlignVertical:"center",
-        marginLeft:10,
+    textContent: {
+        fontWeight: "bold",
+        textAlignVertical: "center",
+        marginLeft: 10,
     },
     itemRender: {
         flexDirection: "row",
         marginVertical: 10,
-        marginLeft:10,
+        marginLeft: 10,
     }
 
 });

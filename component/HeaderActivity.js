@@ -5,7 +5,7 @@ import { red200 } from 'react-native-paper/lib/typescript/styles/colors'
 import { theme } from '../core/theme'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import BackButton from './BackButton'
-
+import { Badge } from 'react-native-paper';
 export default function HeaderActivity(props) {
   // return <Text style={styles.header} {...props} />
   return (
@@ -23,14 +23,22 @@ export default function HeaderActivity(props) {
       <Text style={styles.texthead}>
         {props.header}
       </Text>
-      <MaterialCommunityIcons name="bell-ring" color={theme.colors.white} size={24} />
+
+      <View style={styles.containerbad}>
+        <View style={styles.rowbad}>
+          <MaterialCommunityIcons style={styles.ringing} name="bell-ring" color={theme.colors.white} size={24} />
+          {/* <Badge style={styles.badgeStyle}>3</Badge> */}
+          <Badge style={styles.badgeStyle}>3</Badge>
+        </View>
+      </View>
+
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   header: {
-    fontSize: 21,
+    fontSize: 18,
     color: theme.colors.primary,
     fontWeight: 'bold',
     paddingVertical: 12,
@@ -42,6 +50,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     backgroundColor: '#3366CC',
     justifyContent: 'center',
+    alignItems: 'center',
     position: 'absolute',
     top: 0,
   },
@@ -53,13 +62,24 @@ const styles = StyleSheet.create({
   },
   texthead: {
     flex: 1,
-    fontSize: 20,
+    fontSize: 18,
     color: theme.colors.white,
     fontWeight: 'bold',
   },
   ringing: {
-    width: 30,
-    height: 30,
-    alignItems: 'flex-end'
+    
+  },
+  badgeStyle: { 
+    position: 'absolute',
+    top: -4,
+    right: -4 
+  },
+  containerbad: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight:10,
+  },
+  rowbad: {
+    flexDirection: 'row'
   },
 })

@@ -48,7 +48,7 @@ export default function Promotion({ navigation }) {
                 </Text>
                 <View
                     style={{
-                        borderBottomColor: 'blue100',
+                        borderBottomColor: theme.colors.primary,
                         borderBottomWidth: 1,
                     }}
                 />
@@ -98,6 +98,9 @@ const styles = StyleSheet.create({
         flex:1,
         textAlign:"center",
         paddingHorizontal:10,
+        fontWeight:"bold",
+        color:theme.colors.primary,
+        fontSize:18
       },
     itemRender: {
         flexDirection: "column",

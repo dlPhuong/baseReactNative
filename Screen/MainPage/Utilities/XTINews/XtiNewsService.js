@@ -1,7 +1,7 @@
 import httpAuth from "../../../../http-commons-auth";
 
 
-const getXtinew = () => {
+const getXtinews = () => {
      return httpAuth("").get('api/DashBoard/GetToDashBoard');
 };
 

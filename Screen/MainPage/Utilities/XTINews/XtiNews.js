@@ -34,7 +34,7 @@ export default function XtiNews({ navigation }) {
         return (
             <TouchableOpacity
                 style={styles.itemRender}
-                onPress={() => navigation.navigate('promotionDetail',{item})}
+                onPress={() => navigation.navigate('XtiNewDetail',{item})}
                 >
                 <Image
                     resizeMode="contain"
@@ -48,7 +48,7 @@ export default function XtiNews({ navigation }) {
                 </Text>
                 <View
                     style={{
-                        borderBottomColor: 'blue100',
+                        borderBottomColor: theme.colors.primary,
                         borderBottomWidth: 1,
                     }}
                 />
@@ -65,7 +65,7 @@ export default function XtiNews({ navigation }) {
         <View style={styles.container}>
 
             <View style={{flex: 1}}>
-                <HeaderActivity header={"Tin khuyến mãi"} goback={handleClick} />
+                <HeaderActivity header={"Tin XTI"} goback={handleClick} />
             </View>
 
             <View style={{flex:16}}>
@@ -98,6 +98,9 @@ const styles = StyleSheet.create({
         flex:1,
         textAlign:"center",
         paddingHorizontal:10,
+        fontWeight:"bold",
+        color: theme.colors.primary,
+        fontSize:18,
       },
     itemRender: {
         flexDirection: "column",

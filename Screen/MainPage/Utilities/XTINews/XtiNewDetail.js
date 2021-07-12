@@ -14,6 +14,8 @@ export default function XtiNewDetail({route, navigation }) {
 
     const {item} = route.params;
 
+    console.log(item);
+
     function handleClick() {
         navigation.goBack();
     }

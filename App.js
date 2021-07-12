@@ -13,6 +13,8 @@ import AccountDetail from './Screen/AccountDetail/AccountDetail';
 import Promotion from './Screen/MainPage/Utilities/Promotion/Promotion';
 import PromotionDetail from './Screen/MainPage/Utilities/Promotion/PromotionDetail';
 import XtiNews from './Screen/MainPage/Utilities/XTINews/XtiNews';
+import XtiNewDetail from './Screen/MainPage/Utilities/XTINews/XtiNewDetail';
+import ListPosition from './Screen/MainPage/Utilities/ListPosition/ListPosition';
 
 const Stack = createStackNavigator();
 
@@ -21,14 +23,17 @@ const App = () => {
         <Provider store={store}>
             <NavigationContainer>
                 <Stack.Navigator screenOptions={{headerShown: false}}>
+                <Stack.Screen name="login" component={Login} options={{title: 'Login'}}/>
                     <Stack.Screen name="mainpage" component={MainPage}/>
-                    <Stack.Screen name="login" component={Login} options={{title: 'Login'}}/>
                     <Stack.Screen name="promotion" component={Promotion}/>
                     <Stack.Screen name="promotionDetail" component={PromotionDetail}/>
                     <Stack.Screen name="productDetail" component={ProductDetail}/>
                     <Stack.Screen name="accountDetail" component={AccountDetail}/>
 
                     <Stack.Screen name="xtiNews" component={XtiNews}/>
+                    <Stack.Screen name="XtiNewDetail" component={XtiNewDetail}/>
+
+                    <Stack.Screen name="ListPosition" component={ListPosition}/>
                 </Stack.Navigator>
             </NavigationContainer>
         </Provider>

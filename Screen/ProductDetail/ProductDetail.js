@@ -5,6 +5,7 @@ import {getProduct} from "../MainPage/homeRoute/home-reducer";
 import productDetailReducer, {getProductDetail} from "./ProductDetail-reducer";
 import WebView from "react-native-webview";
 import MainPage from "../MainPage/Mainpage";
+import HeaderActivity from '../../component/HeaderActivity';
 
 const {width: windowWidth, height: windowHeight} = Dimensions.get("window");
 
@@ -29,28 +30,32 @@ export default function ProductDetail({route, navigation}) {
             });
     }, []);
 
+    function handleClick() {
+        navigation.goBack();
+    }
+
     return (
-        <View style={{flex: 1}}>
+        <View style={styles.container}>
+            <View style={{ flex: 1 }}>
+                <HeaderActivity header={"Thông tin bảo hiểm"} goback={handleClick} />
+            </View>
+            <View style={{ flex: 16 }}>
             {productDT ?
-                // <WebView
-                //     originWhitelist={['*']}
-                //     source={{ html: productDT }} />
                 <WebView
                     originWhitelist={['*']}
-                    source={{html: '<html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body style="font-size: 25px;"><p>' + productDT + '</p></body></html>'}}
+                    source={{ html: '<html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body style="font-size: 25px;"><p>' + productDT + '</p></body></html>' }}
                 />
                 : null}
-               
+            </View>
+
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    textTitile: {
-        width: '100%',
+container: {
         flex: 1,
-        marginTop: 18,
-        justifyContent: "space-between",
-        flexDirection: "row",
+        justifyContent: "center",
+        flexDirection:"column"
     }
 });
