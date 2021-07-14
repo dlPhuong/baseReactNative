@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { View, Text, Dimensions, StyleSheet  } from "react-native";
+import { View, Text, Dimensions, StyleSheet } from "react-native";
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 import Header from "../../component/Header";
 import { Button, Switch, TextInput } from 'react-native-paper';
@@ -8,7 +8,8 @@ import { theme } from "../../core/theme";
 import { useDispatch, useSelector } from "react-redux";
 import HeaderActivity from "../../component/HeaderActivity";
 import BackButton from "../../component/BackButton";
-
+import { Input, ButtonGroup } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 export default function AccountDetail({ navigation }) {
@@ -32,49 +33,91 @@ export default function AccountDetail({ navigation }) {
         <View style={{ flex: 1 }}>
             <HeaderActivity header={"Tài khoản"} goback={handleClick} />
             <View style={styles.container}>
-                <TextInput
-                    style={styles.inputstyle}
-                    left={<TextInput.Affix
-                        text="Tài khoản: " customTextStyle={{ fontWeight: 'bold', color: 'red' }} />}
-                    value={logins.Account ? logins.Account.Ma:""}
+
+                <Input
+                    style={{ height: 30 }}
+                    value={logins.Account ? logins.Account.Ma : ""}
+                    label="Tài khoản"
+                    onChangeText={text => setAccount(text)}
+                    leftIcon={
+                        <Icon
+                            name='user'
+                            size={24}
+                            color='black'
+                        />
+                    }
                 />
 
-                <TextInput
-                  style={styles.inputstyle}
-                    left={<TextInput.Affix
-                        text="Tên: " customTextStyle={{ fontWeight: 'bold', color: 'red' }} />}
-                    value={logins.Account?logins.Account.Ten:""}
+                <Input
+                    style={{ height: 30 }}
+                    value={logins.Account ? logins.Account.Ten : ""}
+                    label="Tên"
+                    onChangeText={text => setAccount(text)}
+                    leftIcon={
+                        <Icon
+                            name='user'
+                            size={24}
+                            color='black'
+                        />
+                    }
                 />
 
-                <TextInput
-                   style={styles.inputstyle}
-                    left={<TextInput.Affix
-                        text="Điện thoại: " customTextStyle={{ fontWeight: 'bold', color: 'red' }} />}
-                    value={logins.Account?logins.Account.Mobile:""}
+                <Input
+                    style={{ height: 30 }}
+                    value={logins.Account ? logins.Account.Mobile : ""}
+                    label="Điện thoại"
+                    onChangeText={text => setAccount(text)}
+                    leftIcon={
+                        <Icon
+                            name='user'
+                            size={24}
+                            color='black'
+                        />
+                    }
                 />
 
-                <TextInput
-                    style={styles.inputstyle}
-                    left={<TextInput.Affix
-                        text="cmt: " customTextStyle={{ fontWeight: 'bold', color: 'red' }} />}
-                    value={logins.Account?logins.Account.Mobile:""}
+                <Input
+                    style={{ height: 30 }}
+                    value={logins.Account ? logins.Account.Mobile : ""}
+                    label="CMT/CCCD"
+                    onChangeText={text => setAccount(text)}
+                    leftIcon={
+                        <Icon
+                            name='user'
+                            size={24}
+                            color='black'
+                        />
+                    }
                 />
 
-                <TextInput
-                  style={styles.inputstyle}
-                    left={<TextInput.Affix
-                        text="email: " customTextStyle={{ fontWeight: 'bold', color: 'red' }} />}
-                    value={logins.Account?logins.Account.Email:""}
+                <Input
+                    style={{ height: 30 }}
+                    value={logins.Account ? logins.Account.Email : ""}
+                    label="EMAIL"
+                    onChangeText={text => setAccount(text)}
+                    leftIcon={
+                        <Icon
+                            name='user'
+                            size={24}
+                            color='black'
+                        />
+                    }
                 />
 
-                <TextInput
-                    style={styles.inputstyle}
-                    left={<TextInput.Affix
-                        text="địa chỉ: " customTextStyle={{ fontWeight: 'bold', color: 'red' }} />}
-                    value={logins.Account?logins.Account.DiaChi:""}
+                <Input
+                    style={{ height: 30}}
+                    value={logins.Account ? logins.Account.DiaChi : ""}
+                    label="Địa chỉ"
+                    onChangeText={text => setAccount(text)}
+                    leftIcon={
+                        <Icon
+                            name='user'
+                            size={24}
+                            color='black'
+                        />
+                    }
                 />
-
-                <View style={{ width: windowWidth*0.7,marginTop:20 }}>
+                <View style={{ width: windowWidth * 0.7, marginTop: 20 }}>
                     <Button mode="contained" >
                         Cập nhật tài khoản
                     </Button>
@@ -87,12 +130,11 @@ export default function AccountDetail({ navigation }) {
     );
 }
 
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        marginTop: 40,
+        marginTop: 50,
         alignSelf: 'center',
         alignItems: 'center',
     },
@@ -102,6 +144,6 @@ const styles = StyleSheet.create({
     },
     inputstyle: {
         width: windowWidth,
-        marginVertical:1,
+        marginVertical: 1,
     },
 });

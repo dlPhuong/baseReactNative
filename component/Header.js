@@ -18,14 +18,14 @@ export default function Header(props) {
       <Text style={styles.texthead}>
         {props.header}
       </Text>
-
+      {props.ringring?
       <View style={styles.containerbad}>
         <View style={styles.rowbad}>
         <MaterialCommunityIcons style={styles.ringing} name="bell-ring" color={theme.colors.white} size={24} />
         <Badge style={styles.badgeStyle}>3</Badge>
         </View>
       </View>
-    
+    :null}
     </View>
   );
 }

@@ -8,7 +8,7 @@ import { Switch, TextInput } from 'react-native-paper';
 import * as Keychain from 'react-native-keychain';
 import { useDispatch, useSelector } from "react-redux";
 import { getToken } from "../../Login/Login-reducer";
-import { MMKV } from 'react-native-mmkv';
+// import { MMKV } from 'react-native-mmkv';
 
 export default function Account({ navigation }) {
     const { FingerModule } = NativeModules;
@@ -63,10 +63,10 @@ export default function Account({ navigation }) {
     async function nextScreen(navi) {
         switch (navi) {
             case 'account':
-                navigation.navigate('accountDetail')
+                navigation.navigate('accountDetail');
                 break;
             case 'folder-key':
-                console.log("hihi laf tows ne");
+                navigation.navigate('ChangePassword');
                 break;
             case 'logout':
                 await Keychain.resetGenericPassword();

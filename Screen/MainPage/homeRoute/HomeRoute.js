@@ -88,7 +88,7 @@ export default function HomeRoute({ navigation }) {
 
     <ScrollView style={{ flex: 1 }}>
       <View style={{ position: 'absolute', flex: 1, left: 0, right: 0, top: 0 }}>
-        <Header header={"Trang chủ"} />
+        <Header header={"Trang chủ"} ringring={true} />
       </View>
       <View style={{ flex: 1 }}>
 

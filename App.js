@@ -15,6 +15,9 @@ import PromotionDetail from './Screen/MainPage/Utilities/Promotion/PromotionDeta
 import XtiNews from './Screen/MainPage/Utilities/XTINews/XtiNews';
 import XtiNewDetail from './Screen/MainPage/Utilities/XTINews/XtiNewDetail';
 import ListPosition from './Screen/MainPage/Utilities/ListPosition/ListPosition';
+import ResetPasswordScreen from './Screen/ResetPassword/ResetPassword';
+import Register from './Screen/Register/Register';
+import ChangePassword from './Screen/ChangePassword/ChangePassword';
 
 const Stack = createStackNavigator();
 
@@ -34,6 +37,11 @@ const App = () => {
                     <Stack.Screen name="XtiNewDetail" component={XtiNewDetail}/>
 
                     <Stack.Screen name="ListPosition" component={ListPosition}/>
+                    <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen}/>
+                    <Stack.Screen name="Register" component={Register}/>
+                    <Stack.Screen name="ChangePassword" component={ChangePassword}/>
+                    
+
                 </Stack.Navigator>
             </NavigationContainer>
         </Provider>

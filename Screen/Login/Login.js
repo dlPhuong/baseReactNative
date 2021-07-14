@@ -13,7 +13,7 @@ import axios from "axios";
 import { RawButton } from "react-native-gesture-handler";
 import { decode as atob, encode as btoa } from 'base-64'
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { MMKV } from 'react-native-mmkv';
+// import { MMKV } from 'react-native-mmkv';
 import TouchID from 'react-native-touch-id';
 import * as Keychain from 'react-native-keychain';
 
@@ -70,7 +70,8 @@ export default function Login({ navigation }) {
 
   async function checkCountBioMetrics(credentials) { // check số lượng vân tay hiện có trong máy 
     const count = await FingerModule.getFingerprintInfo();
-    const value = MMKV.getNumber('count')
+    // const value = MMKV.getNumber('count')
+    const value = 3;
     console.log('count', value);
     if (value < count) { // nếu có vân tay thêm vào hệ thống 
       Alert.alert("phát hiện có vân tay mới thêm vào hệ thống bạn cần xác nhận lại mật khẩu của mình");
@@ -156,7 +157,7 @@ export default function Login({ navigation }) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate('ResetPasswordScreen')}
+          onPress={() => navigation.navigate('Register')}
         >
           <Text style={styles.forgot}>Đăng ký tài khoản</Text>
         </TouchableOpacity>
