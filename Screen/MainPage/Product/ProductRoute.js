@@ -52,7 +52,7 @@ export default function ProductRoute({navigation}) {
     return (
 
     <View style={{ flex: 1 }}>
-      <View style={{position: 'absolute',flex: 1, left: 0, right: 0, top: 0}}>
+      <View style={{flex:1,maxHeight:40}}>
         <Header header={"Sản phẩm"} />
       </View>
       <ScrollView style={{ flex: 1}}>

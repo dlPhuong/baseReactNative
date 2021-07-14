@@ -29,7 +29,7 @@ export default function PromotionDetail({route, navigation }) {
                 {item ?
                     <WebView
                         originWhitelist={['*']}
-                        source={{ html: '<html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body style="font-size: 25px;"><p>' + item.NoiDung + '</p></body></html>' }}
+                        source={{ html: '<html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body style="font-size: 14px;"><p>' + item.NoiDung + '</p></body></html>' }}
                     />
                     : null}
             </View>

@@ -22,7 +22,9 @@ export default function Header(props) {
       <View style={styles.containerbad}>
         <View style={styles.rowbad}>
         <MaterialCommunityIcons style={styles.ringing} name="bell-ring" color={theme.colors.white} size={24} />
-        <Badge style={styles.badgeStyle}>3</Badge>
+        {props.total > 0 ? 
+        <Badge style={styles.badgeStyle}>{props.total}</Badge>
+        :null}
         </View>
       </View>
     :null}

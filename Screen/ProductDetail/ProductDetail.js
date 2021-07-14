@@ -43,7 +43,7 @@ export default function ProductDetail({route, navigation}) {
             {productDT ?
                 <WebView
                     originWhitelist={['*']}
-                    source={{ html: '<html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body style="font-size: 25px;"><p>' + productDT + '</p></body></html>' }}
+                    source={{ html: '<html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body style="font-size: 14px;"><p>' + productDT + '</p></body></html>' }}
                 />
                 : null}
             </View>

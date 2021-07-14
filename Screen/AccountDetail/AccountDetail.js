@@ -10,6 +10,7 @@ import HeaderActivity from "../../component/HeaderActivity";
 import BackButton from "../../component/BackButton";
 import { Input, ButtonGroup } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { ScrollView } from "react-native-gesture-handler";
 
 
 export default function AccountDetail({ navigation }) {
@@ -31,9 +32,11 @@ export default function AccountDetail({ navigation }) {
     // render giao diện {item.icon}
     return (
         <View style={{ flex: 1 }}>
+            <View style={{flex:1,maxHeight:40}}>
             <HeaderActivity header={"Tài khoản"} goback={handleClick} />
+            </View>
+            <ScrollView style={{flex:1}}>
             <View style={styles.container}>
-
                 <Input
                     style={{ height: 30 }}
                     value={logins.Account ? logins.Account.Ma : ""}
@@ -117,14 +120,14 @@ export default function AccountDetail({ navigation }) {
                         />
                     }
                 />
-                <View style={{ width: windowWidth * 0.7, marginTop: 20 }}>
+                <View style={{ width: windowWidth * 0.7, marginVertical:20 }}>
                     <Button mode="contained" >
                         Cập nhật tài khoản
                     </Button>
                 </View>
 
             </View>
-
+            </ScrollView>
 
         </View>
     );
@@ -134,7 +137,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        marginTop: 50,
+        marginTop: 10,
         alignSelf: 'center',
         alignItems: 'center',
     },

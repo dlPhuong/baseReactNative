@@ -14,7 +14,8 @@ import Header from "../../../component/Header";
 import Carosel from "../../../component/Carosel";
 import { FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { getProduct } from "./home-reducer";
+import { getProduct,getNotifi } from "./home-reducer";
+import { theme } from '../../../core/theme';
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
 export default function HomeRoute({ navigation }) {
@@ -32,8 +33,11 @@ export default function HomeRoute({ navigation }) {
   ]
   const [product, setproduct] = useState(null);
   const [product1, setproduct1] = useState(dataUseful);
+  const [notifi, setNotifi] = useState(null);
 
   const productRedux = useSelector(state => state.product);
+  const logins = useSelector(state => state.login);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -55,20 +59,40 @@ export default function HomeRoute({ navigation }) {
     }
   }, []);
 
+
+  useEffect(() => {
+    if (productRedux.notifi != null) {
+      setNotifi(productRedux.notifi);
+    }
+    else {
+      let auth = logins.Token.access_token;
+      dispatch(getNotifi(auth))
+        .then(data => {
+          if (data != null) {
+            setNotifi(data);
+          }
+        })
+        .catch(e => {
+          // console.log(e);
+        });
+    }
+  }, []);
+
+
   // item flatlist
   const renderItem = ({ item }) => {
     return (
-        <TouchableOpacity
-            onPress={() => navigation.navigate('productDetail',{item})}
-            style={{ justifyContent: 'center', alignItems: 'center', marginVertical: 10 }}>
-          <Image
-              style={styles.IMGFlatlistItem}
-              source={{
-                uri: item.ImageUrl,
-              }}
-          />
-          <Text style={styles.TextFlatlistItem}>{item.Ten}</Text>
-        </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('productDetail', { item })}
+        style={{ justifyContent: 'center', alignItems: 'center', marginVertical: 10 }}>
+        <Image
+          style={styles.IMGFlatlistItem}
+          source={{
+            uri: item.ImageUrl,
+          }}
+        />
+        <Text style={styles.TextFlatlistItem}>{item.Ten}</Text>
+      </TouchableOpacity>
     );
   }
 
@@ -85,53 +109,51 @@ export default function HomeRoute({ navigation }) {
   }
 
   return (
+    <View style={{flex:1}}>
+      <TouchableOpacity 
+      // onPress={() => navigation.navigate('Register')}
+      style={{ flex: 1, maxHeight: 40 }}>
+        <Header header={"Trang chủ"} ringring={true} total={notifi ? notifi.Total:null} />
+      </TouchableOpacity>
+      <ScrollView style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
+          <Carosel/>
+          <View style={styles.textTitile}>
+            <Text style={styles.itemtextTitile}>
+              Sản phẩm bảo hiểm
+            </Text>
+            <Image
+              style={styles.image}
+              style={styles.image}
+              source={require('../../../assets/Hotline.png')}
+            />
+          </View>
 
-    <ScrollView style={{ flex: 1 }}>
-      <View style={{ position: 'absolute', flex: 1, left: 0, right: 0, top: 0 }}>
-        <Header header={"Trang chủ"} ringring={true} />
-      </View>
-      <View style={{ flex: 1 }}>
+          {/* danh sách sản phẩm */}
+          <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+            <FlatList
+              data={product ? product.Items : null}
+              numColumns={3}
+              renderItem={renderItem}
+              keyExtractor={item => item.Id}
+            />
+          </SafeAreaView>
 
-        <Carosel />
-        
-        <View style={styles.textTitile}>
-          <Text style={styles.itemtextTitile}>
-            Sản phẩm bảo hiểm
+          <Text style={styles.itemtextTitile1}>
+            Thông tin hữu ích
           </Text>
-          <Image
-            style={styles.image}
-            style={styles.image}
-            source={require('../../../assets/Hotline.png')}
-          />
+
+          <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <FlatList
+              data={product1 ? product1 : null}
+              numColumns={3}
+              renderItem={renderItem1}
+              keyExtractor={item => item.Id}
+            />
+          </SafeAreaView>
         </View>
-
-        {/* danh sách sản phẩm */}
-        <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center',marginTop:10 }}>
-          <FlatList
-            data={product ? product.Items : null}
-            numColumns={3}
-            renderItem={renderItem}
-            keyExtractor={item => item.Id}
-          />
-        </SafeAreaView>
-
-
-
-        <Text style={styles.itemtextTitile1}>
-          Thông tin hữu ích
-        </Text>
-
-        <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <FlatList
-            data={product1 ? product1 : null}
-            numColumns={3}
-            renderItem={renderItem1}
-            keyExtractor={item => item.Id}
-          />
-        </SafeAreaView>
-      </View>
-    </ScrollView>
-
+      </ScrollView>
+    </View>
   );
 }
 

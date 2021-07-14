@@ -13,9 +13,8 @@ const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   slide: {
-    height: windowHeight * 0.2,
+    height: windowHeight * 0.3,
     width: windowWidth,
-    marginTop:40,
   },
   slideImage: { width: windowWidth , height: windowHeight * 0.2 },
   slideTitle: { fontSize: 20 },
@@ -59,25 +58,25 @@ const Slide = memo(function Slide({ data }) {
   );
 });
 
-// function Pagination({ index }) {
-//   return (
-//     <View style={styles.pagination} pointerEvents="none">
-//       {slideList.map((_, i) => {
-//         return (
-//           <View
-//             key={i}
-//             style={[
-//               styles.paginationDot,
-//               index === i
-//                 ? styles.paginationDotActive
-//                 : styles.paginationDotInactive,
-//             ]}
-//           />
-//         );
-//       })}
-//     </View>
-//   );
-// }
+function Pagination({ index }) {
+  return (
+    <View style={styles.pagination} pointerEvents="none">
+      {slideList.map((_, i) => {
+        return (
+          <View
+            key={i}
+            style={[
+              styles.paginationDot,
+              index === i
+                ? styles.paginationDotActive
+                : styles.paginationDotInactive,
+            ]}
+          />
+        );
+      })}
+    </View>
+  );
+}
 
 export default function Carosel() {
   const [index, setIndex] = useState(0);
