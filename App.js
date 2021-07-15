@@ -18,6 +18,7 @@ import ListPosition from './Screen/MainPage/Utilities/ListPosition/ListPosition'
 import ResetPasswordScreen from './Screen/ResetPassword/ResetPassword';
 import Register from './Screen/Register/Register';
 import ChangePassword from './Screen/ChangePassword/ChangePassword';
+import Shoping from './Screen/shoping/Shoping';
 
 const Stack = createStackNavigator();
 
@@ -41,7 +42,7 @@ const App = () => {
                     <Stack.Screen name="Register" component={Register}/>
                     <Stack.Screen name="ChangePassword" component={ChangePassword}/>
                     
-
+                    <Stack.Screen name="Shoping" component={Shoping}/>
                 </Stack.Navigator>
             </NavigationContainer>
         </Provider>
