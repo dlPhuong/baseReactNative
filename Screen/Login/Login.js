@@ -37,13 +37,15 @@ export default function Login({ navigation }) {
   };
 
   const onLoginPressed = () => {
-    // const emailError = emailValidator(email.value)
-    // const passwordError = passwordValidator(password.value)
-    // if (emailError || passwordError) {
-    //   setEmail({ ...email, error: emailError })
-    //   setPassword({ ...password, error: passwordError })
-    //   return
-    // }
+    const emailError = emailValidator(email.value)
+    const passwordError = passwordValidator(password.value)
+
+    if (emailError || passwordError) {
+      setEmail({ ...email, error: emailError })
+      setPassword({ ...password, error: passwordError })
+      return
+    }
+
     setEmail({ value: '0964892238', error: '' });
     setPassword({ value: 'Sonmang98.', error: '' });
     let dataraw = 'grant_type=password&username=' + email.value + '&password=' + btoa(password.value) + '&client_id=000&client_secret=M&redirect_uri=';
@@ -119,21 +121,20 @@ export default function Login({ navigation }) {
       {/*</View>*/}
 
       <Logo />
-
-      <TextInput
-        style={{ paddingHorizontal: 20 }}
-        label="Nhập tài khoản"
-        returnKeyType="next"
-        value={email.value}
-        onChangeText={(text) => setEmail({ value: text, error: '' })}
-        error={!!email.error}
-        errorText={email.error}
-        autoCapitalize="none"
-        autoCompleteType="email"
-        textContentType="emailAddress"
-        keyboardType="email-address"
-      />
-
+      <View style={styles.inputTextForm}>
+        <TextInput
+          label="Nhập tài khoản"
+          returnKeyType="next"
+          value={email.value}
+          onChangeText={(text) => setEmail({ value: text, error: '' })}
+          error={!!email.error}
+          errorText={email.error}
+          autoCapitalize="none"
+          autoCompleteType="email"
+          textContentType="emailAddress"
+          keyboardType="email-address"
+        />
+      </View>
 
 
       <View style={styles.inputTextForm}>
