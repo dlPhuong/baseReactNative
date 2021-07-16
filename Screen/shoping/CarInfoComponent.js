@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, Dimensions, SafeAreaView, ScrollView, StyleSheet, Image } from "react-native";
+import { View, Text,Modal,FlatList, Pressable, Dimensions, SafeAreaView, ScrollView, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import WebView from "react-native-webview";
 import { Button } from 'react-native-elements';
@@ -8,20 +8,57 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { theme } from "../../core/theme";
 import { Switch } from 'react-native-elements';
 import { Input, ButtonGroup } from 'react-native-elements';
+import { getdata,getCarBrands } from './shop-reducer';
+import TextInput from "../../component/TextInput";
+import { CheckBox } from 'react-native-elements'
+import { baseProps } from 'react-native-gesture-handler/lib/typescript/handlers/gestureHandlers';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
-export default function CarInfoComponent() {
+export default function CarInfoComponent(props) {
 
     const [isSwitch, setisSwitch] = useState(false);
-
     const [account, setAccount] = useState({ value: '', error: '' });
+    const [listData, setlistData] = useState(null); // danh sách data call từ API về
+    const [listCar, setlistCar] = useState(null); // danh sách hãng xe
+    const [selectedCar, setselectedCar] = useState(null); // select hãng xe
+    const [CarBrands, setCarBrands] = useState(null); // danh sách nhãn hiệu xe
+    const [selectedCarBrand, setselectedCarBrand] = useState(null); // chọn nhãn hiệu xe
+    const [modalVisible, setModalVisible] = useState(false);
 
-    function updateIndex(selected) {
-        setselectedIndex(selected);
-    }
-    function switch1() {
-        setisSwitch(!isSwitch);
-    }
 
+    const [searchText, setsearchText] = React.useState('');
+    const [filteredData, setfilteredData] = React.useState(null);
+
+    const [checked, SetChecked] = React.useState(null);
+
+    const dispatch = useDispatch();
+    const logins = useSelector(state => state.login);
+    const listDataSlt = useSelector(state => state.shopDatas);
+
+    
+// code logic
+
+    useEffect(() => {
+        // console.log("hmm 123 ",listDataSlt.ShopDatas.DanhSachHangXe);
+        if (logins != null) {
+            if (listDataSlt.ShopDatas != null) {
+                setlistData(listDataSlt);
+                setlistCar(listDataSlt.ShopDatas.DanhSachHangXe);
+            } else {
+                dispatch(getdata(logins.Token.access_token))
+                    .then(data => {
+                        console.log("hmm 123",data);
+                        setlistData(data);
+                        setlistCar(data.DanhSachHangXe);
+                    })
+                    .catch(e => {
+                        // console.log(e);
+                    });
+            }
+        }
+    }, []);
+
+    // cac giao dien con 
     function renderLabel(label) {
         return (
             <View style={{ flexDirection: "row" }}>
@@ -31,10 +68,100 @@ export default function CarInfoComponent() {
         );
     }
 
+    function renderModal() {
+        return (
+            <View style={styles.centeredView}>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        setModalVisible(!modalVisible);
+                    }}
+                >
+                    {/* <View style={styles.centeredView}> */}
+
+                        <View style={styles.modalView}>
+
+                        <SafeAreaView
+                            style={styles.headerModal}
+                            onPress={() => setModalVisible(!modalVisible)}
+                        >
+                            <TouchableOpacity
+                             onPress={() => setModalVisible(!modalVisible)}
+                            >
+                                <Icon
+                                style={{marginLeft:10}}
+                                    name='times'
+                                    size={24}
+                                    color='white'
+                                />
+                            </TouchableOpacity>
+                            <Text style={styles.textStyle}>chọn danh sách xe</Text>
+                        
+                        </SafeAreaView>
+                    
+                        <View>
+                            <TextInput
+                                style={styles.InputSearch}
+                                label="Tìm kiếm"
+                                value={searchText}
+                                onChangeText={(text) => search(text)}
+                            />
+                        </View>
+
+                                <FlatList
+                                    style={{width:windowWidth}}
+                                    data={filteredData && filteredData.length > 0 ? filteredData : listCar}
+                                    renderItem={renderItemModal}
+                                    keyExtractor={item => item.Ma}
+                                    scrollEnabled={true}
+                                />
+                        </View>
+                    {/* </View> */}
+                </Modal>
+            </View>
+
+        );
+    }
+
+    const renderItemModal = ({ item }) => {
+        return (
+            <CheckBox
+                onPress={()=>selectCar(item)}
+                containerStyle={styles.checkboxSize}
+                title={item.Ten}
+                checkedIcon='dot-circle-o'
+                uncheckedIcon='circle-o'
+                checked={selectedCar ? selectedCar.Ten == item.Ten ? true : false : false}
+            />
+        );
+    }
+
+    const selectCar = (item) => {
+         setselectedCar(item);
+         setModalVisible(!modalVisible);
+         
+         dispatch(getCarBrands(item.Ten))
+         .then(data => {
+            //setlistCar(data);
+         })
+         .catch(e => {
+             // console.log(e);
+         });
+
+    };
+
+    const search = (text) => {
+        setsearchText(text);
+        let filteredData = listCar.filter(function (value) {
+            return value.Ten.toString().toLowerCase().indexOf(searchText.toLowerCase()) >= 0;
+        });
+        setfilteredData(filteredData);
+    };
+
     return (
         <View>
-
-
             <View style={{ flexDirection: 'row', marginTop: 5 }}>
                 <Icon
                     name="car"
@@ -46,7 +173,7 @@ export default function CarInfoComponent() {
 
 
             <SafeAreaView style={{ marginTop: 10, flexDirection: 'column' }}>
-
+           
                 <View style={{ flexDirection: 'row', flex: 1, maxWidth: windowWidth }} >
 
                     <View style={{ flex: 1 }}>
@@ -74,9 +201,11 @@ export default function CarInfoComponent() {
                     onChangeText={text => setAccount({ value: text, error: '' })}
                     errorMessage={account.error}
                 />
-
+                <TouchableOpacity
+                onPress={() => setModalVisible(true)}
+                >
                 <Input
-                    // value={phone.value}
+                    value={selectedCar!=null ? selectedCar.Ten:null}
                     label={renderLabel("Chọn hãng xe")}
                     disabled={true}
                     // onChangeText={text => setPhone({ value: text, error: '' })}
@@ -89,6 +218,7 @@ export default function CarInfoComponent() {
                         />
                     }
                 />
+                </TouchableOpacity>
 
                 <Input
                     // value={phone.value}
@@ -169,11 +299,10 @@ export default function CarInfoComponent() {
                         />
                     </View>
                 </View>
-
+                    
             </SafeAreaView>
-
+            {renderModal()}
         </View>
-
     );
 }
 
@@ -194,5 +323,45 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginLeft: 10,
         marginVertical: 20,
-    }
+    },
+    centeredView: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: "center",
+        alignItems: "center",
+      },
+      modalView: {
+        backgroundColor: "white",
+        height:windowHeight,
+        width:windowWidth,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+      },
+      InputSearch: {
+        height: 30,
+        width:windowWidth*0.9,
+    },
+      textStyle: {
+        color: theme.colors.white,
+        fontWeight: "bold",
+        textAlign: "center",
+        fontSize:18,
+        marginLeft:10,
+      },
+      headerModal: {
+        height:40,
+        width:windowWidth,
+        flexDirection:'row',
+        backgroundColor:theme.colors.primary,
+        justifyContent:'flex-start',
+        alignItems: 'center'
+      }
+
 });

@@ -21,6 +21,12 @@ export default function Shoping({ route, navigation }) {
     function handleClick() {
         navigation.goBack();
     }
+    
+
+    function selectCar(item){
+      console.log(item);
+     // setselectedCar();
+    }
 
     return (
         <View style={{flex:1}}>
