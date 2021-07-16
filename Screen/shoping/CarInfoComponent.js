@@ -11,26 +11,28 @@ import { Input, ButtonGroup } from 'react-native-elements';
 import { getdata,getCarBrands } from './shop-reducer';
 import TextInput from "../../component/TextInput";
 import { CheckBox } from 'react-native-elements'
-import { baseProps } from 'react-native-gesture-handler/lib/typescript/handlers/gestureHandlers';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { getCurrentDate } from '../../Utils/getCurentDate';
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 export default function CarInfoComponent(props) {
 
-    const [isSwitch, setisSwitch] = useState(false);
     const [account, setAccount] = useState({ value: '', error: '' });
+
+    const [dateFrom, setdateFrom] = useState({ value:''+getCurrentDate(0), error: '' });
+    const [dateTo, setdateTo] = useState({ value:''+getCurrentDate(1), error: '' });
+
     const [listData, setlistData] = useState(null); // danh sách data call từ API về
     const [listCar, setlistCar] = useState(null); // danh sách hãng xe
     const [selectedCar, setselectedCar] = useState(null); // select hãng xe
     const [CarBrands, setCarBrands] = useState(null); // danh sách nhãn hiệu xe
     const [selectedCarBrand, setselectedCarBrand] = useState(null); // chọn nhãn hiệu xe
-    const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);// modal hãng xe 
+    const [modalVisibleBrands, setmodalVisibleBrands] = useState(false);// modal hãng xe 
+
 
 
     const [searchText, setsearchText] = React.useState('');
     const [filteredData, setfilteredData] = React.useState(null);
-
-    const [checked, SetChecked] = React.useState(null);
-
+    const [filteredDataBrands, setfilteredDataBrands] = React.useState(null);
     const dispatch = useDispatch();
     const logins = useSelector(state => state.login);
     const listDataSlt = useSelector(state => state.shopDatas);
@@ -67,7 +69,7 @@ export default function CarInfoComponent(props) {
             </View>
         );
     }
-
+    // modal hãng xe 
     function renderModal() {
         return (
             <View style={styles.centeredView}>
@@ -124,7 +126,6 @@ export default function CarInfoComponent(props) {
 
         );
     }
-
     const renderItemModal = ({ item }) => {
         return (
             <CheckBox
@@ -137,21 +138,28 @@ export default function CarInfoComponent(props) {
             />
         );
     }
-
     const selectCar = (item) => {
+
+        if(selectedCar!=null){
+            if(selectedCar.Ten != item.Ten){
+                setselectedCarBrand(null);
+            }
+        }
+
          setselectedCar(item);
          setModalVisible(!modalVisible);
-         
+
+        
+
          dispatch(getCarBrands(item.Ten))
          .then(data => {
-            //setlistCar(data);
+            setCarBrands(data);
          })
          .catch(e => {
              // console.log(e);
          });
 
     };
-
     const search = (text) => {
         setsearchText(text);
         let filteredData = listCar.filter(function (value) {
@@ -159,7 +167,89 @@ export default function CarInfoComponent(props) {
         });
         setfilteredData(filteredData);
     };
+    // end modal hãng xe
 
+    // modal mẫu xe
+    function renderModalBrands() {
+        return (
+            <View style={styles.centeredView}>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisibleBrands}
+                    onRequestClose={() => {
+                        setmodalVisibleBrands(!modalVisibleBrands);
+                    }}
+                >
+                    {/* <View style={styles.centeredView}> */}
+
+                        <View style={styles.modalView}>
+
+                        <SafeAreaView
+                            style={styles.headerModal}
+                            
+                        >
+                            <TouchableOpacity
+                             onPress={() => setmodalVisibleBrands(!modalVisibleBrands)}
+                            >
+                                <Icon
+                                style={{marginLeft:10}}
+                                    name='times'
+                                    size={24}
+                                    color='white'
+                                />
+                            </TouchableOpacity>
+                            <Text style={styles.textStyle}>chọn danh sách mẫu xe</Text>
+                        
+                        </SafeAreaView>
+                    
+                        <View>
+                            <TextInput
+                                style={styles.InputSearch}
+                                label="Tìm kiếm"
+                                value={searchText}
+                                onChangeText={(text) => searchBrands(text)}
+                            />
+                        </View>
+
+                                <FlatList
+                                    style={{width:windowWidth}}
+                                    data={filteredDataBrands && filteredDataBrands.length > 0 ? filteredDataBrands : CarBrands}
+                                    renderItem={renderItemModalBrands}
+                                    keyExtractor={item => item.SoId}
+                                    scrollEnabled={true}
+                                />
+                        </View>
+                    {/* </View> */}
+                </Modal>
+            </View>
+
+        );
+    }
+    const renderItemModalBrands = ({ item }) => {
+        return (
+            <CheckBox
+                onPress={()=>selectCarBrands(item)}
+                containerStyle={styles.checkboxSize}
+                title={item.Ten}
+                checkedIcon='dot-circle-o'
+                uncheckedIcon='circle-o'
+                checked={selectedCarBrand ? selectedCarBrand.Ten == item.Ten ? true : false : false}
+            />
+        );
+    }
+    const selectCarBrands = (item) => {
+         setselectedCarBrand(item);
+         setmodalVisibleBrands(!modalVisibleBrands);
+    };
+    const searchBrands = (text) => {
+        setsearchText(text);
+        let filteredData = CarBrands.filter(function (value) {
+            return value.Ten.toString().toLowerCase().indexOf(searchText.toLowerCase()) >= 0;
+        });
+        setfilteredDataBrands(filteredData);
+    };
+    // end modal mẫu xe
     return (
         <View>
             <View style={{ flexDirection: 'row', marginTop: 5 }}>
@@ -170,7 +260,6 @@ export default function CarInfoComponent(props) {
                 />
                 <Text style={styles.titleStyle}>Thông tin về ô tô</Text>
             </View>
-
 
             <SafeAreaView style={{ marginTop: 10, flexDirection: 'column' }}>
            
@@ -220,25 +309,28 @@ export default function CarInfoComponent(props) {
                 />
                 </TouchableOpacity>
 
-                <Input
-                    // value={phone.value}
-                    label={renderLabel("Nhãn hiệu")}
-                    disabled={true}
-                    // onChangeText={text => setPhone({ value: text, error: '' })}
-                    // errorMessage={phone.error}
-                    rightIcon={
-                        <Icon
-                            name='sort-down'
-                            size={24}
-                            color='black'
-                        />
-                    }
-                />
-
+                <TouchableOpacity
+                    onPress={() => setmodalVisibleBrands(true)}
+                >
+                    <Input
+                         value={selectedCarBrand?selectedCarBrand.Ten:null}
+                        label={renderLabel("Nhãn hiệu")}
+                        disabled={true}
+                        // onChangeText={text => setPhone({ value: text, error: '' })}
+                        // errorMessage={phone.error}
+                        rightIcon={
+                            <Icon
+                                name='sort-down'
+                                size={24}
+                                color='black'
+                            />
+                        }
+                    />
+                </TouchableOpacity>
                 <View style={{ flexDirection: 'row', flex: 1, maxWidth: windowWidth }} >
                     <View style={{ flex: 1 }}>
                         <Input
-                            value={account.value}
+                            value={dateFrom.value}
                             label={renderLabel("Ngày hiệu lực")}
                             onChangeText={text => setAccount({ value: text, error: '' })}
                             errorMessage={account.error}
@@ -247,7 +339,7 @@ export default function CarInfoComponent(props) {
 
                     <View style={{ flex: 1 }}>
                         <Input
-                            value={account.value}
+                            value={dateTo.value}
                             label={renderLabel("Ngày kết thúc")}
                             onChangeText={text => setAccount({ value: text, error: '' })}
                             errorMessage={account.error}
@@ -256,7 +348,7 @@ export default function CarInfoComponent(props) {
                 </View>
 
                 <View >
-                    <Text style={styles.titleStyleBlack}>Ngày cấp : </Text>
+                    <Text style={styles.titleStyleBlack}>Ngày cấp : {dateFrom.value}</Text>
                 </View>
 
 
@@ -302,6 +394,7 @@ export default function CarInfoComponent(props) {
                     
             </SafeAreaView>
             {renderModal()}
+            {renderModalBrands()}
         </View>
     );
 }
