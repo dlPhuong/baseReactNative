@@ -12,6 +12,7 @@ import { getdata,getCarBrands } from './shop-reducer';
 import TextInput from "../../component/TextInput";
 import { CheckBox } from 'react-native-elements'
 import { getCurrentDate } from '../../Utils/getCurentDate';
+import ModalComponent from './ModalComponent';
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 export default function CarInfoComponent(props) {
 
@@ -49,7 +50,7 @@ export default function CarInfoComponent(props) {
             } else {
                 dispatch(getdata(logins.Token.access_token))
                     .then(data => {
-                        console.log("hmm 123",data);
+                        console.log("hmm 123",data.DanhSachHangXe);
                         setlistData(data);
                         setlistCar(data.DanhSachHangXe);
                     })
@@ -250,6 +251,18 @@ export default function CarInfoComponent(props) {
         setfilteredDataBrands(filteredData);
     };
     // end modal mẫu xe
+
+    // test component
+    function tongleModal(){
+       setModalVisible(!modalVisible) 
+    }
+    function setselectedCarBrands(){
+        setselectedCarBrand(null);
+    }
+    function setselectedCar1(item){
+        // setselectedCar(item);
+        console.log("huhu ",item);
+    }
     return (
         <View>
             <View style={{ flexDirection: 'row', marginTop: 5 }}>
@@ -291,7 +304,7 @@ export default function CarInfoComponent(props) {
                     errorMessage={account.error}
                 />
                 <TouchableOpacity
-                onPress={() => setModalVisible(true)}
+                onPress={() => tongleModal()}
                 >
                 <Input
                     value={selectedCar!=null ? selectedCar.Ten:null}
@@ -393,8 +406,14 @@ export default function CarInfoComponent(props) {
                 </View>
                     
             </SafeAreaView>
-            {renderModal()}
-            {renderModalBrands()}
+            {/* {renderModal()}
+            {renderModalBrands()} */}
+            <ModalComponent
+                listCar={listCar}
+                modalVisible={modalVisible}
+                setselectedCarBrand={setselectedCarBrands}
+                setselectedCar={setselectedCar1}
+                tongleModal={tongleModal} />
         </View>
     );
 }
