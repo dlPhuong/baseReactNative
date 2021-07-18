@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text,Modal,FlatList, Pressable, Dimensions, SafeAreaView, ScrollView, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import WebView from "react-native-webview";
-import { Button } from 'react-native-elements';
-import HeaderActivity from '../../component/HeaderActivity';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { theme } from "../../core/theme";
-import { Switch } from 'react-native-elements';
 import { Input, ButtonGroup } from 'react-native-elements';
 import { getdata,getCarBrands } from './shop-reducer';
-import TextInput from "../../component/TextInput";
-import { CheckBox } from 'react-native-elements'
 import { getCurrentDate } from '../../Utils/getCurentDate';
 import ModalComponent from './ModalComponent';
+import ModalComponentBrands from './ModalComponentBrands'
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 export default function CarInfoComponent(props) {
 
@@ -26,14 +21,10 @@ export default function CarInfoComponent(props) {
     const [selectedCar, setselectedCar] = useState(null); // select hãng xe
     const [CarBrands, setCarBrands] = useState(null); // danh sách nhãn hiệu xe
     const [selectedCarBrand, setselectedCarBrand] = useState(null); // chọn nhãn hiệu xe
+
     const [modalVisible, setModalVisible] = useState(false);// modal hãng xe 
     const [modalVisibleBrands, setmodalVisibleBrands] = useState(false);// modal hãng xe 
 
-
-
-    const [searchText, setsearchText] = React.useState('');
-    const [filteredData, setfilteredData] = React.useState(null);
-    const [filteredDataBrands, setfilteredDataBrands] = React.useState(null);
     const dispatch = useDispatch();
     const logins = useSelector(state => state.login);
     const listDataSlt = useSelector(state => state.shopDatas);
@@ -42,7 +33,6 @@ export default function CarInfoComponent(props) {
 // code logic
 
     useEffect(() => {
-        // console.log("hmm 123 ",listDataSlt.ShopDatas.DanhSachHangXe);
         if (logins != null) {
             if (listDataSlt.ShopDatas != null) {
                 setlistData(listDataSlt);
@@ -50,7 +40,6 @@ export default function CarInfoComponent(props) {
             } else {
                 dispatch(getdata(logins.Token.access_token))
                     .then(data => {
-                        console.log("hmm 123",data.DanhSachHangXe);
                         setlistData(data);
                         setlistCar(data.DanhSachHangXe);
                     })
@@ -70,199 +59,40 @@ export default function CarInfoComponent(props) {
             </View>
         );
     }
-    // modal hãng xe 
-    function renderModal() {
-        return (
-            <View style={styles.centeredView}>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                        setModalVisible(!modalVisible);
-                    }}
-                >
-                    {/* <View style={styles.centeredView}> */}
+    
 
-                        <View style={styles.modalView}>
-
-                        <SafeAreaView
-                            style={styles.headerModal}
-                            onPress={() => setModalVisible(!modalVisible)}
-                        >
-                            <TouchableOpacity
-                             onPress={() => setModalVisible(!modalVisible)}
-                            >
-                                <Icon
-                                style={{marginLeft:10}}
-                                    name='times'
-                                    size={24}
-                                    color='white'
-                                />
-                            </TouchableOpacity>
-                            <Text style={styles.textStyle}>chọn danh sách xe</Text>
-                        
-                        </SafeAreaView>
-                    
-                        <View>
-                            <TextInput
-                                style={styles.InputSearch}
-                                label="Tìm kiếm"
-                                value={searchText}
-                                onChangeText={(text) => search(text)}
-                            />
-                        </View>
-
-                                <FlatList
-                                    style={{width:windowWidth}}
-                                    data={filteredData && filteredData.length > 0 ? filteredData : listCar}
-                                    renderItem={renderItemModal}
-                                    keyExtractor={item => item.Ma}
-                                    scrollEnabled={true}
-                                />
-                        </View>
-                    {/* </View> */}
-                </Modal>
-            </View>
-
-        );
-    }
-    const renderItemModal = ({ item }) => {
-        return (
-            <CheckBox
-                onPress={()=>selectCar(item)}
-                containerStyle={styles.checkboxSize}
-                title={item.Ten}
-                checkedIcon='dot-circle-o'
-                uncheckedIcon='circle-o'
-                checked={selectedCar ? selectedCar.Ten == item.Ten ? true : false : false}
-            />
-        );
-    }
-    const selectCar = (item) => {
-
-        if(selectedCar!=null){
-            if(selectedCar.Ten != item.Ten){
-                setselectedCarBrand(null);
-            }
-        }
-
-         setselectedCar(item);
-         setModalVisible(!modalVisible);
-
-        
-
-         dispatch(getCarBrands(item.Ten))
-         .then(data => {
-            setCarBrands(data);
-         })
-         .catch(e => {
-             // console.log(e);
-         });
-
-    };
-    const search = (text) => {
-        setsearchText(text);
-        let filteredData = listCar.filter(function (value) {
-            return value.Ten.toString().toLowerCase().indexOf(searchText.toLowerCase()) >= 0;
-        });
-        setfilteredData(filteredData);
-    };
-    // end modal hãng xe
-
-    // modal mẫu xe
-    function renderModalBrands() {
-        return (
-            <View style={styles.centeredView}>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisibleBrands}
-                    onRequestClose={() => {
-                        setmodalVisibleBrands(!modalVisibleBrands);
-                    }}
-                >
-                    {/* <View style={styles.centeredView}> */}
-
-                        <View style={styles.modalView}>
-
-                        <SafeAreaView
-                            style={styles.headerModal}
-                            
-                        >
-                            <TouchableOpacity
-                             onPress={() => setmodalVisibleBrands(!modalVisibleBrands)}
-                            >
-                                <Icon
-                                style={{marginLeft:10}}
-                                    name='times'
-                                    size={24}
-                                    color='white'
-                                />
-                            </TouchableOpacity>
-                            <Text style={styles.textStyle}>chọn danh sách mẫu xe</Text>
-                        
-                        </SafeAreaView>
-                    
-                        <View>
-                            <TextInput
-                                style={styles.InputSearch}
-                                label="Tìm kiếm"
-                                value={searchText}
-                                onChangeText={(text) => searchBrands(text)}
-                            />
-                        </View>
-
-                                <FlatList
-                                    style={{width:windowWidth}}
-                                    data={filteredDataBrands && filteredDataBrands.length > 0 ? filteredDataBrands : CarBrands}
-                                    renderItem={renderItemModalBrands}
-                                    keyExtractor={item => item.SoId}
-                                    scrollEnabled={true}
-                                />
-                        </View>
-                    {/* </View> */}
-                </Modal>
-            </View>
-
-        );
-    }
-    const renderItemModalBrands = ({ item }) => {
-        return (
-            <CheckBox
-                onPress={()=>selectCarBrands(item)}
-                containerStyle={styles.checkboxSize}
-                title={item.Ten}
-                checkedIcon='dot-circle-o'
-                uncheckedIcon='circle-o'
-                checked={selectedCarBrand ? selectedCarBrand.Ten == item.Ten ? true : false : false}
-            />
-        );
-    }
-    const selectCarBrands = (item) => {
-         setselectedCarBrand(item);
-         setmodalVisibleBrands(!modalVisibleBrands);
-    };
-    const searchBrands = (text) => {
-        setsearchText(text);
-        let filteredData = CarBrands.filter(function (value) {
-            return value.Ten.toString().toLowerCase().indexOf(searchText.toLowerCase()) >= 0;
-        });
-        setfilteredDataBrands(filteredData);
-    };
-    // end modal mẫu xe
-
-    // test component
+    // component car
     function tongleModal(){
        setModalVisible(!modalVisible) 
     }
-    function setselectedCarBrands(){
+    function selectedCarBrands(){
         setselectedCarBrand(null);
     }
-    function setselectedCar1(item){
-        // setselectedCar(item);
-        console.log("huhu ",item);
+    function selectCarmodal(item){
+         setselectedCar(item);
+         console.log(item);
+        dispatch(getCarBrands(item.Ten))
+            .then(data => {
+                console.log(data);
+                setCarBrands(data);
+            })
+            .catch(e => {
+                // console.log(e);
+            });
+        //console.log("huhu ",item);
     }
+
+    // car brands
+
+    function setselectedCarBrands(item){
+        setselectedCarBrand(item);
+        console.log(item);
+   }
+
+
+    function tongleModalBrands(){
+        setmodalVisibleBrands(!modalVisibleBrands) 
+     }
     return (
         <View>
             <View style={{ flexDirection: 'row', marginTop: 5 }}>
@@ -323,7 +153,7 @@ export default function CarInfoComponent(props) {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    onPress={() => setmodalVisibleBrands(true)}
+                    onPress={() => tongleModalBrands()}
                 >
                     <Input
                          value={selectedCarBrand?selectedCarBrand.Ten:null}
@@ -411,9 +241,18 @@ export default function CarInfoComponent(props) {
             <ModalComponent
                 listCar={listCar}
                 modalVisible={modalVisible}
-                setselectedCarBrand={setselectedCarBrands}
-                setselectedCar={setselectedCar1}
+                setselectedCarBrand={selectedCarBrands}
+                setselectedCar={selectCarmodal}
+                selectCarModal={selectedCar}
                 tongleModal={tongleModal} />
+
+            <ModalComponentBrands
+                listCar={CarBrands}
+                modalVisible={modalVisibleBrands}
+                setselectedCarBrand={setselectedCarBrands}
+                setselectedCar={setselectedCarBrands}
+                tongleModalBrands={tongleModalBrands} />
+
         </View>
     );
 }
@@ -435,45 +274,5 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginLeft: 10,
         marginVertical: 20,
-    },
-    centeredView: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: "center",
-        alignItems: "center",
-      },
-      modalView: {
-        backgroundColor: "white",
-        height:windowHeight,
-        width:windowWidth,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5
-      },
-      InputSearch: {
-        height: 30,
-        width:windowWidth*0.9,
-    },
-      textStyle: {
-        color: theme.colors.white,
-        fontWeight: "bold",
-        textAlign: "center",
-        fontSize:18,
-        marginLeft:10,
-      },
-      headerModal: {
-        height:40,
-        width:windowWidth,
-        flexDirection:'row',
-        backgroundColor:theme.colors.primary,
-        justifyContent:'flex-start',
-        alignItems: 'center'
-      }
-
+    }
 });

@@ -9,33 +9,33 @@ import { CheckBox } from 'react-native-elements'
 import { useDispatch, useSelector } from "react-redux";
 import { getdata } from './shop-reducer';
 
-export default function ModalComponent(props) {
+export default function ModalComponentBrands(props) {
     const [searchText, setsearchText] = React.useState('');
     const [filteredData, setfilteredData] = React.useState(null);
     const [listCar, setlistCar] = useState(null); // danh sách hãng xe
     const [selectedCar, setselectedCar] = useState(null); // select hãng xe
-    const logins = useSelector(state => state.login);
-    const listDataSlt = useSelector(state => state.shopDatas);
 
     const dispatch = useDispatch();
 
 
-    useEffect(() => {
-        // console.log("hmm 123 ",listDataSlt.ShopDatas.DanhSachHangXe);
-        if (logins != null) {
-            if (listDataSlt.ShopDatas != null) {
-                setlistCar(listDataSlt.ShopDatas.DanhSachHangXe);
-            } else {
-                dispatch(getdata(logins.Token.access_token))
-                    .then(data => {
-                        setlistCar(data.DanhSachHangXe);
-                    })
-                    .catch(e => {
-                        // console.log(e);
-                    });
-            }
-        }
-    }, []);
+
+    // useEffect(() => {
+    //     // console.log("hmm 123 ",listDataSlt.ShopDatas.DanhSachHangXe);
+    //     if (logins != null) {
+    //         if (listDataSlt.ShopDatas != null) {
+    //             setlistCar(listDataSlt.ShopDatas.DanhSachHangXe);
+    //         } else {
+    //             dispatch(getCarBrands(item.Ten))
+    //             .then(data => {
+    //                 console.log(data);
+    //                 setCarBrands(data);
+    //             })
+    //             .catch(e => {
+    //                 // console.log(e);
+    //             });
+    //         }
+    //     }
+    // }, []);
 
     const renderItemModal = ({ item }) => {
         return (
@@ -45,20 +45,20 @@ export default function ModalComponent(props) {
                 title={item.Ten}
                 checkedIcon='dot-circle-o'
                 uncheckedIcon='circle-o'
-                checked={props.selectCarModal ? props.selectCarModal.Ten == item.Ten ? true : false : false}
+                checked={selectedCar ? selectedCar.Ten == item.Ten ? true : false : false}
             />
         );
     }
     const selectCar = (item) => {
 
-        if (props.selectCarModal != null) {
-            if (props.selectCarModal.Ten != item.Ten) {
-                props.setselectedCarBrand();
+        if (selectedCar != null) {
+            if (selectedCar.Ten != item.Ten) {
+                props.setselectedCarBrand(null);
             }
         }
         
        props.setselectedCar(item);
-       props.tongleModal();
+       props.tongleModalBrands();
     };
     const search = (text) => {
         setsearchText(text);
@@ -77,17 +77,17 @@ export default function ModalComponent(props) {
                 transparent={true}
                 visible={props.modalVisible}
                 onRequestClose={() => {
-                    props.tongleModal()
+                    props.tongleModalBrands()
                 }}
             >
                 <View style={styles.modalView}>
 
                     <SafeAreaView
                         style={styles.headerModal}
-                        onPress={() => props.tongleModal()}
+                        onPress={() => props.tongleModalBrands()}
                     >
                         <TouchableOpacity
-                            onPress={() => props.tongleModal()}
+                            onPress={() => props.tongleModalBrands()}
                         >
                             <Icon
                                 style={{ marginLeft: 10 }}
