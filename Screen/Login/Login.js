@@ -19,8 +19,8 @@ import * as Keychain from 'react-native-keychain';
 
 export default function Login({ navigation }) {
   const { FingerModule } = NativeModules;
-  const [email, setEmail] = useState({ value: '', error: '' });
-  const [password, setPassword] = useState({ value: '', error: '' });
+  const [email, setEmail] = useState({ value: '0964892238', error: '' });
+  const [password, setPassword] = useState({ value: 'Sonmang98.', error: '' });
 
   const dispatch = useDispatch();
 
@@ -46,8 +46,8 @@ export default function Login({ navigation }) {
     //   return
     // }
 
-    setEmail({ value: '0964892238', error: '' });
-    setPassword({ value: 'Sonmang98.', error: '' });
+    // setEmail({ value: '0964892238', error: '' });
+    // setPassword({ value: 'Sonmang98.', error: '' });
     let dataraw = 'grant_type=password&username=' + email.value + '&password=' + btoa(password.value) + '&client_id=000&client_secret=M&redirect_uri=';
     dispatch(getToken(dataraw))
       .then(data => {

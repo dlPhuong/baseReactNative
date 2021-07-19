@@ -54,7 +54,7 @@ export default function CarInfoComponent(props) {
     function renderLabel(label) {
         return (
             <View style={{ flexDirection: "row" }}>
-                <Text style={{ fontWeight: 'bold' }}>{label + " "}</Text>
+                <Text style={{ fontWeight: 'bold',color:theme.colors.primary }}>{label + " "}</Text>
                 <Text style={{ color: theme.colors.error }}>*</Text>
             </View>
         );
@@ -261,18 +261,19 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "center",
+        alignItems:'center',
         flexDirection: "column"
     },
     titleStyle: {
         fontWeight: 'bold',
-        fontSize: 24,
+        fontSize: 18,
         color: theme.colors.primary,
         marginLeft: 10,
     },
     titleStyleBlack: {
         fontWeight: 'bold',
+        color:theme.colors.primary,
         fontSize: 18,
-        marginLeft: 10,
-        marginVertical: 20,
+        marginBottom: 20,
     }
 });

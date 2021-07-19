@@ -8,7 +8,7 @@ import { getPositions } from "./Position-reducer";
 import { useDispatch, useSelector } from "react-redux";
 import { theme } from "../../../../core/theme";
 import TextInput from "../../../../component/TextInput";
-
+import * as Progress from 'react-native-progress';
 export default function ListPosition({ route, navigation }) {
     const item = route.params.navi;
 
@@ -117,8 +117,6 @@ export default function ListPosition({ route, navigation }) {
                     scrollEnabled={true}
                 />
             </View>
-
-
         </View>
     );
 }

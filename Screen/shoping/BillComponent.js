@@ -9,7 +9,8 @@ import { theme } from "../../core/theme";
 import { Switch } from 'react-native-elements';
 import { Input, ButtonGroup } from 'react-native-elements';
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
-export default function UserComponent() {
+
+export default function BillComponent() {
     const logins = useSelector(state => state.login);
     console.log(logins);
     const buttons = ['cá nhân', 'tổ chức']
@@ -25,78 +26,52 @@ export default function UserComponent() {
     const [email, setEmail] = useState({ value: logins.Account.Email, error: '' });
     const [address, setAddress] = useState({ value: logins.Account.DiaChi, error: '' });
 
-
-
-    function updateIndex(selected) {
-        setselectedIndex(selected);
-    }
-    function switch1() {
-        setisSwitch(!isSwitch);
-    }
-
     function renderLabel(label) {
         return (
             <View style={{ flexDirection: "row" }}>
                 <Text style={{ fontWeight: 'bold',color:theme.colors.primary }}>{label + " "}</Text>
-                <Text style={{ color: theme.colors.error }}>*</Text>
+            
             </View>
         );
     }
 
     return (
         <View>
-            <View style={{ flexDirection: 'row', marginTop: 20,alignItems:'center' }}>
-                <Icon
-                    name="user"
-                    size={24}
-                    color="#5AE5F5"
-                />
-                <Text style={styles.titleStyle}>Người mua BH</Text>
-            </View>
-
-            <SafeAreaView style={{ alignItems: "center" }} >
-                <ButtonGroup
-                    onPress={updateIndex}
-                    selectedIndex={selectedIndex}
-                    buttons={buttons}
-                    containerStyle={{ height: 40, width: 200, borderRadius: 5, }}
-                />
-            </SafeAreaView>
-
-            <SafeAreaView style={{ flexDirection: 'row', alignItems: 'center' }} >
-                <Switch value={isSwitch} onChange={switch1} />
-                <Text style={{ color: theme.colors.primary, fontSize: 18, fontWeight: 'bold' }}> Người mua bảo hiểm khác chủ xe</Text>
-            </SafeAreaView>
-
             <SafeAreaView style={{ marginTop: 10, flexDirection: 'column', alignItems: 'center' }}>
+
+                <SafeAreaView style={styles.containerRow}>
+                    {/* check confidition here */}
+                    <Text style={{ fontWeight: 'bold',fontSize:18, color: theme.colors.primary }}> Thông tin người nhận hóa đơn</Text>
+                </SafeAreaView>
+
                 <Input
                     value={name.value}
-                    label={renderLabel(isSwitch?"tên":"Tên chủ xe theo DK")}
+                    label={renderLabel('Người nhận hóa đơn')}
                     onChangeText={text => setName({ value: text, error: '' })}
                     errorMessage={account.error}
                 />
 
                 <Input
                     value={phone.value}
-                    label={renderLabel("Điện thoại")}
+                    label={renderLabel('Địa chỉ')}
                     onChangeText={text => setPhone({ value: text, error: '' })}
                     errorMessage={account.error}
                 />
                 <Input
                     value={identity.value}
-                    label={renderLabel( selectedIndex==0?"CCCD/Hộ chiếu":"Mã số thuế")}
+                    label={renderLabel('Mã số thuế')}
                     onChangeText={text => setIdentity({ value: text, error: '' })}
                     errorMessage={account.error}
                 />
                 <Input
                     value={email.value}
-                    label={renderLabel("Email")}
+                    label={renderLabel('Điện thoại')}
                     onChangeText={text => setEmail({ value: text, error: '' })}
                     errorMessage={account.error}
                 />
                 <Input
                     value={address.value}
-                    label={renderLabel( isSwitch?"Địa chỉ":"Địa chỉ theo DK")}
+                    label={renderLabel('Email')}
                     onChangeText={text => setAddress({ value: text, error: '' })}
                     errorMessage={account.error}
                 />
@@ -115,8 +90,13 @@ const styles = StyleSheet.create({
     },
     titleStyle: {
         fontWeight: 'bold',
-        fontSize: 18,
+        fontSize: 24,
         color: theme.colors.primary,
         marginLeft: 10,
-    }
+    },containerRow: {
+        flex: 1,
+        flexDirection: 'row',
+        paddingHorizontal:5,
+        marginVertical:5,
+    },
 });

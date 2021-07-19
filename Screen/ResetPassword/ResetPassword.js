@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Alert, Pressable, Dimensions, StyleSheet } from "react-native";
+import React, { useState,useEffect } from "react";
+import { View, Text, TouchableOpacity,SafeAreaView, Alert, Pressable, Dimensions, StyleSheet } from "react-native";
 import Button from "../../component/Button";
 import Header from "../../component/Header";
 import TextInput from "../../component/TextInput";
 import { theme } from "../../core/theme";
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { decode as atob, encode as btoa } from 'base-64'
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import HeaderActivity from "../../component/HeaderActivity";
@@ -12,19 +12,117 @@ import { white } from "react-native-paper/lib/typescript/styles/colors";
 import { acc } from "react-native-reanimated";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
+import { capchaValid } from "../../Utils/capchaValid";
+import { renderLabel } from "../../Utils/renderLabel";
+import { nameValidator } from "../../Utils/nameValidator";
+import { email1Valid } from "../../Utils/email1Valid";
+import { validOtp } from "../../Utils/validOtp";
+
+var axios = require('axios');
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 export default function ResetPasswordScreen({ navigation }) {
 
-    const [account, setAccount] = useState('');
-    const [phone, setPhone] = useState('');
-    const [email, setEmail] = useState('');
-    const [capcha, setCapcha] = useState('');
+    const characters ='qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM';
 
-    const dispatch = useDispatch();
-
+    const [account, setAccount] = useState({ value: '', error: '' });
+    const [phone, setPhone] = useState({ value: '', error: '' });
+    const [email, setEmail] = useState({ value: '', error: '' });
+    const [capcha, setCapcha] = useState({ value: '', error: '' });
+    const [validcapcha, setvalidcapcha] = useState('');
+    const [otp, setOtp] = useState('');
+    const [otpvalue, setOtpValue] = useState({ value: '', error: '' });
+    const logins = useSelector(state => state.login);
     function handleBack() {
         navigation.goBack();
+    }
+
+    useEffect(() => {
+        randomCapcha();
+        const intervalId = setInterval(() => {
+            randomCapcha();
+        }, 120000);
+        return () => clearInterval(intervalId); 
+    }, []);
+
+    function randomCapcha(){
+        let result = '';
+        const charactersLength = characters.length;
+        for ( let i = 0; i < 6; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+       setvalidcapcha(result);
+    }
+    function genCapcha(label) {
+        return (
+            <View style={{flexDirection:"row"}}>
+            <Text style={{fontWeight:'bold'}}>{label}</Text>
+            <Text style={{color:theme.colors.error}}>*</Text>
+            <SafeAreaView style={{marginLeft:5,backgroundColor:theme.colors.primary,justifyContent: 'center'}}>
+                <Text style={{color:theme.colors.white,fontWeight:"bold",paddingHorizontal:5}}>{validcapcha}</Text>
+            </SafeAreaView>
+                <TouchableOpacity 
+                onPress={randomCapcha}
+                style={{marginLeft:5,}}>
+                    <Icon
+                        name='refresh'
+                        size={20}
+                        color='blue'
+                    />
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
+    function resetPass() {
+        console.log(capcha.value);
+        console.log(validcapcha);
+        const accouterr = nameValidator(account.value)
+        const phoneError = nameValidator(phone.value)
+        const emailErr = email1Valid(email.value)
+        const capchaErr = capchaValid(capcha.value,validcapcha)
+        if (accouterr || phoneError || emailErr ||capchaErr) {
+            setAccount({ ...account, error: accouterr });
+            setPhone({ ...phone, error: phoneError });
+            setEmail({ ...email, error: emailErr });
+            setCapcha({ ...capcha, error: capchaErr });
+            return;
+        }else{
+         getCodeOtp();
+        }
+    }
+
+    function getCodeOtp(){
+          
+        var config = {
+            method: 'get',
+            url: 'https://sandbox.xti.vn/api/nsd/GetForgotPass?username='+account.value+'&email='+email.value+'&mobile='+phone.value,
+            headers: { 
+              'Authorization': 'bearer '+ logins.Token.access_token
+            }
+          };
+          
+          axios(config)
+          .then(function (response) {
+              setOtp(response.data);
+            console.log(response.data);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    }
+
+    function validateOtp(){
+        const otpErr = validOtp(otpvalue.value,otp);
+        if (otpErr) {
+            setOtpValue({ ...otpvalue, error: otpErr }); 
+            return;  
+        }else{
+            if(otp===otpvalue.value){
+                console.log("valid thanfh coong call api did naf ");
+            }
+        }
+
     }
 
     return (
@@ -37,9 +135,10 @@ export default function ResetPasswordScreen({ navigation }) {
 
                 <Input
                     style={{ height: 40 }}
-                    value={account}
-                    label="Tài khoản"
-                    onChangeText={text => setAccount(text)}
+                    value={account.value}
+                    errorMessage={account.error}
+                    label={renderLabel("Tài khoản")}
+                    onChangeText={text => setAccount({ value: text, error: '' })}
                     leftIcon={
                         <Icon
                             name='user'
@@ -51,9 +150,10 @@ export default function ResetPasswordScreen({ navigation }) {
 
                 <Input
                     style={{ height: 40 }}
-                    label="Số điện thoại"
-                    value={phone}
-                    onChangeText={text => setPhone(text)}
+                    label= {renderLabel("Số điện thoại")}
+                    value={phone.value}
+                    errorMessage={phone.error}
+                    onChangeText={text => setPhone({ value: text, error: '' })}
                     leftIcon={
                         <Icon
                             name='phone'
@@ -65,9 +165,10 @@ export default function ResetPasswordScreen({ navigation }) {
 
                 <Input
                     style={{ height: 40 }}
-                    label="Email"
-                    value={email}
-                    onChangeText={text => setEmail(text)}
+                    label={renderLabel("Email")}
+                    value={email.value}
+                    errorMessage={email.error}
+                    onChangeText={text => setEmail({ value: text, error: '' })}
                     leftIcon={
                         <Icon
                             name='envelope-open'
@@ -79,23 +180,27 @@ export default function ResetPasswordScreen({ navigation }) {
 
                 <Input
                     style={{ height: 40 }}
-                    value={capcha}
-                    label={'capcha'}
-                    onChangeText={text => setCapcha(text)}
-                    leftIcon={
-                        <Icon
-                            name='snapchat-ghost'
-                            size={24}
-                            color='black'
-                        />
-                    }
+                    value={capcha.value}
+                    errorMessage={capcha.error}
+                    label={genCapcha("capcha")}
+                    onChangeText={text => setCapcha({ value: text, error: '' })}
                 />
+
+                {otp ?
+                    <Input
+                        style={{ height: 40 }}
+                        label={renderLabel("Xác nhận mã ")}
+                        value={otpvalue.value}
+                        errorMessage={otpvalue.error}
+                        onChangeText={text => setOtpValue({ value: text, error: '' })}
+                    />
+                    : null}
 
                 <Pressable
                     style={styles.button}
-                // onPress={() => checkAccount()}
+                    onPress={otp ? () => validateOtp() : () => resetPass()}
                 >
-                    <Text style={{ textAlign: "center", color: theme.colors.white, fontWeight: "bold" }}>xác nhận mật khẩu</Text>
+                    <Text style={{ textAlign: "center", color: theme.colors.white, fontWeight: "bold" }}>{otp ? "xác nhận OTP":"xác nhận mật khẩu"}</Text>
                 </Pressable>
 
             </View>

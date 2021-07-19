@@ -22,6 +22,7 @@ import { capchaValid } from "../../Utils/capchaValid";
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 const axios = require('axios');
 import https from "../../http-commons-auth";
+import { renderLabel } from "../../Utils/renderLabel";
 
 export default function Register({ navigation }) {
 
@@ -59,15 +60,6 @@ export default function Register({ navigation }) {
         return () => clearInterval(intervalId); 
     }, []);
 
-    function renderLabel(label) {
-        return (
-            <View style={{flexDirection:"row"}}>
-            <Text>{label+" "}</Text>
-            <Text style={{color:theme.colors.error}}>*</Text>
-            </View>
-        );
-    }
-
     function randomCapcha(){
         let result = '';
         const charactersLength = characters.length;
@@ -76,7 +68,7 @@ export default function Register({ navigation }) {
         }
        setvalidcapcha(result);
     }
-    function genCapcha(label,capcha) {
+    function genCapcha(label) {
         return (
             <View style={{flexDirection:"row"}}>
             <Text>{label}</Text>
@@ -322,7 +314,7 @@ export default function Register({ navigation }) {
 
                     <Input
                         value={capcha.value}
-                        label={genCapcha("Capcha",)}
+                        label={genCapcha("Capcha")}
                         onChangeText={text => setCapcha({ value: text, error: '' })}
                         errorMessage={capcha.error}
                         leftIcon={
