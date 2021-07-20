@@ -32,6 +32,11 @@ export default function ResetPasswordScreen({ navigation }) {
     const [validcapcha, setvalidcapcha] = useState('');
     const [otp, setOtp] = useState('');
     const [otpvalue, setOtpValue] = useState({ value: '', error: '' });
+
+    const [pass, setPass] = useState({ value: '', error: '' });
+    const [rePass, setRepass] = useState({ value: '', error: '' });
+
+    const [checkotp, setcheckotp] = useState('b1');
     const logins = useSelector(state => state.login);
     function handleBack() {
         navigation.goBack();
@@ -74,9 +79,7 @@ export default function ResetPasswordScreen({ navigation }) {
         );
     }
 
-    function resetPass() {
-        console.log(capcha.value);
-        console.log(validcapcha);
+    function resetPass() {// bước 1
         const accouterr = nameValidator(account.value)
         const phoneError = nameValidator(phone.value)
         const emailErr = email1Valid(email.value)
@@ -92,37 +95,90 @@ export default function ResetPasswordScreen({ navigation }) {
         }
     }
 
-    function getCodeOtp(){
+    function getCodeOtp(){ 
           
         var config = {
             method: 'get',
             url: 'https://sandbox.xti.vn/api/nsd/GetForgotPass?username='+account.value+'&email='+email.value+'&mobile='+phone.value,
             headers: { 
-              'Authorization': 'bearer '+ logins.Token.access_token
             }
           };
           
           axios(config)
           .then(function (response) {
               setOtp(response.data);
-            console.log(response.data);
+            setcheckotp('b2');
           })
           .catch(function (error) {
             console.log(error);
           });
     }
 
-    function validateOtp(){
+    function validateOtp(){ // bước 2
         const otpErr = validOtp(otpvalue.value,otp);
         if (otpErr) {
             setOtpValue({ ...otpvalue, error: otpErr }); 
             return;  
         }else{
             if(otp===otpvalue.value){
-                console.log("valid thanfh coong call api did naf ");
+                setcheckotp('b3');
             }
         }
 
+    }
+
+    function changePAssword(){ // bước 3
+
+        const passErr = nameValidator(pass.value);
+        const repassErr = nameValidator(rePass.value);
+        if (passErr || repassErr) {
+            setPass({ ...pass, error: passErr }); 
+            setRepass({ ...rePass, error: repassErr }); 
+            return;  
+        }
+        if(pass.value != rePass.value){
+            setRepass({ ...rePass, error: 'xin vui lòng nhập lại' }); 
+        }
+        else{
+
+
+            let data = JSON.stringify({"UserName":""+account.value+"","Email":""+email.value+"","Mobile":""+phone.value+"","MaXacMinh":""+otpvalue.value+"","MaMoi":""+pass.value+"","MaMoiLai":""+rePass.value+""});
+
+            var config = {
+                method: 'post',
+                url: 'https://sandbox.xti.vn/api/nsd/ChangePass',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            axios(config)
+                .then(function (response) {
+                   Alert.alert("đổi mật khẩu thành công cho tài khoản "+account.value);
+                   navigation.navigate('login');
+                })
+                .catch(function (error) {
+                    Alert.alert(""+error.response.data);
+                });
+
+
+        }
+
+    }
+
+    function onclickButton() {
+        switch (checkotp) {
+            case 'b1':
+                resetPass();
+                break;
+            case 'b2':
+                validateOtp();
+                break;
+            case 'b3':
+                changePAssword();
+                break;
+        }
     }
 
     return (
@@ -133,73 +189,98 @@ export default function ResetPasswordScreen({ navigation }) {
 
             <View style={{ flex: 9, marginHorizontal: 10, marginTop: 10 }}>
 
-                <Input
-                    style={{ height: 40 }}
-                    value={account.value}
-                    errorMessage={account.error}
-                    label={renderLabel("Tài khoản")}
-                    onChangeText={text => setAccount({ value: text, error: '' })}
-                    leftIcon={
-                        <Icon
-                            name='user'
-                            size={24}
-                            color='black'
+                {checkotp == 'b1' ?
+                    <View>
+                        <Input
+                            style={{ height: 40 }}
+                            value={account.value}
+                            errorMessage={account.error}
+                            label={renderLabel("Tài khoản")}
+                            onChangeText={text => setAccount({ value: text, error: '' })}
+                            leftIcon={
+                                <Icon
+                                    name='user'
+                                    size={24}
+                                    color='black'
+                                />
+                            }
                         />
-                    }
-                />
 
-                <Input
-                    style={{ height: 40 }}
-                    label= {renderLabel("Số điện thoại")}
-                    value={phone.value}
-                    errorMessage={phone.error}
-                    onChangeText={text => setPhone({ value: text, error: '' })}
-                    leftIcon={
-                        <Icon
-                            name='phone'
-                            size={24}
-                            color='black'
+                        <Input
+                            style={{ height: 40 }}
+                            label={renderLabel("Số điện thoại")}
+                            value={phone.value}
+                            errorMessage={phone.error}
+                            onChangeText={text => setPhone({ value: text, error: '' })}
+                            leftIcon={
+                                <Icon
+                                    name='phone'
+                                    size={24}
+                                    color='black'
+                                />
+                            }
                         />
-                    }
-                />
 
-                <Input
-                    style={{ height: 40 }}
-                    label={renderLabel("Email")}
-                    value={email.value}
-                    errorMessage={email.error}
-                    onChangeText={text => setEmail({ value: text, error: '' })}
-                    leftIcon={
-                        <Icon
-                            name='envelope-open'
-                            size={24}
-                            color='black'
+                        <Input
+                            style={{ height: 40 }}
+                            label={renderLabel("Email")}
+                            value={email.value}
+                            errorMessage={email.error}
+                            onChangeText={text => setEmail({ value: text, error: '' })}
+                            leftIcon={
+                                <Icon
+                                    name='envelope-open'
+                                    size={24}
+                                    color='black'
+                                />
+                            }
                         />
-                    }
-                />
 
-                <Input
-                    style={{ height: 40 }}
-                    value={capcha.value}
-                    errorMessage={capcha.error}
-                    label={genCapcha("capcha")}
-                    onChangeText={text => setCapcha({ value: text, error: '' })}
-                />
-
-                {otp ?
-                    <Input
-                        style={{ height: 40 }}
-                        label={renderLabel("Xác nhận mã ")}
-                        value={otpvalue.value}
-                        errorMessage={otpvalue.error}
-                        onChangeText={text => setOtpValue({ value: text, error: '' })}
-                    />
+                        <Input
+                            style={{ height: 40 }}
+                            value={capcha.value}
+                            errorMessage={capcha.error}
+                            label={genCapcha("capcha")}
+                            onChangeText={text => setCapcha({ value: text, error: '' })}
+                        />
+                    </View>
                     : null}
+
+                {checkotp == 'b2' ?
+                        <Input
+                            style={{ height: 40 }}
+                            label={renderLabel("Xác nhận mã ")}
+                            value={otpvalue.value}
+                            errorMessage={otpvalue.error}
+                            onChangeText={text => setOtpValue({ value: text, error: '' })}
+                        />
+                    : null}
+
+                    {checkotp == 'b3' ? 
+                    <View>
+                        <Input
+                            style={{ height: 40 }}
+                            label={renderLabel("Mật khẩu mới")}
+                            value={pass.value}
+                            errorMessage={pass.error}
+                            onChangeText={text => setPass({ value: text, error: '' })}
+                        />
+
+                        <Input
+                            style={{ height: 40 }}
+                            label={renderLabel("Xác nhận mật khẩu mới ")}
+                            value={rePass.value}
+                            errorMessage={rePass.error}
+                            onChangeText={text => setRepass({ value: text, error: '' })}
+                        />
+                        
+                         </View>
+                    
+                    :null}
 
                 <Pressable
                     style={styles.button}
-                    onPress={otp ? () => validateOtp() : () => resetPass()}
-                >
+                    onPress={() => onclickButton()}>
                     <Text style={{ textAlign: "center", color: theme.colors.white, fontWeight: "bold" }}>{otp ? "xác nhận OTP":"xác nhận mật khẩu"}</Text>
                 </Pressable>
 
