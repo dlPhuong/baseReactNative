@@ -64,6 +64,9 @@ export default function Utilities({ navigation }) {
             case 'car-settings':
                 navigation.navigate('ListPosition', { navi })
                 break;
+            case 'badminton':
+                navigation.navigate('ListPosition', { navi })
+                break;
             default:
             // code block
         }

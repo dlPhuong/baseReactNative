@@ -36,7 +36,7 @@ export default function ResetPasswordScreen({ navigation }) {
     const [pass, setPass] = useState({ value: '', error: '' });
     const [rePass, setRepass] = useState({ value: '', error: '' });
 
-    const [checkotp, setcheckotp] = useState('b1');
+    const [checkotp, setcheckotp] = useState('b2');
     const logins = useSelector(state => state.login);
     function handleBack() {
         navigation.goBack();
@@ -247,6 +247,7 @@ export default function ResetPasswordScreen({ navigation }) {
                     : null}
 
                 {checkotp == 'b2' ?
+                    <View>
                         <Input
                             style={{ height: 40 }}
                             label={renderLabel("Xác nhận mã ")}
@@ -254,6 +255,19 @@ export default function ResetPasswordScreen({ navigation }) {
                             errorMessage={otpvalue.error}
                             onChangeText={text => setOtpValue({ value: text, error: '' })}
                         />
+                        <Text>một mã bí mật đã được gửi về địa chỉ email bạn cung cấp. 
+                            Nếu chưa nhận được mã nào vui lòng </Text>
+                            <View style={{flexDirection:'row'}}>
+                            <TouchableOpacity
+                            onPress={()=>getCodeOtp()}
+                            >
+                            <Text style={{color:theme.colors.primary}}> nhấn vào Đây </Text>
+                            </TouchableOpacity>
+                            <Text>để nhận lại mã xác thực</Text>
+                            </View>
+
+                           
+                    </View>
                     : null}
 
                     {checkotp == 'b3' ? 
@@ -281,7 +295,7 @@ export default function ResetPasswordScreen({ navigation }) {
                 <Pressable
                     style={styles.button}
                     onPress={() => onclickButton()}>
-                    <Text style={{ textAlign: "center", color: theme.colors.white, fontWeight: "bold" }}>{otp ? "xác nhận OTP":"xác nhận mật khẩu"}</Text>
+                    <Text style={{ textAlign: "center", color: theme.colors.white, fontWeight: "bold" }}>{checkotp =='b1' ? "Gửi thông tin" : checkotp=='b2' ? "xác nhận OTP" : checkotp=='b3'? "Xác nhận mật khẩu":null  }</Text>
                 </Pressable>
 
             </View>
